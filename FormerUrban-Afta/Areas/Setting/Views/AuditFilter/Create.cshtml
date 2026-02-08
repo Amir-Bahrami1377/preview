@@ -1,0 +1,27 @@
+﻿@model AuditFilterDto
+
+<div class="modal-header">
+    <h6 class="modal-title">ایجاد</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <form method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-12">
+                <label class="form-label" asp-for="FormName">نام فرم</label>
+                <select class="form-select form-select-sm" asp-for="FormName" asp-items="@Model.FormNameDrp"></select>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="CreateAuditFiltersForm">
+        ایجاد
+    </button>
+</div>

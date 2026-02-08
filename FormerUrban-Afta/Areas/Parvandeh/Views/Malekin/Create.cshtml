@@ -1,0 +1,104 @@
+﻿@model Dv_malekinDTO
+
+<div class="modal-header">
+    <h6 class="modal-title" id="ParvandehCrateTitle">ایجاد مالک</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body h-300 overflow-scroll">
+    <form autocomplete="off">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Identity"/>
+        <input type="hidden" asp-for="shop"/>
+        <input type="hidden" asp-for="d_radif"/>
+        <input type="hidden" asp-for="id"/>
+        <input type="hidden" asp-for="mtable_name"/>
+        <div class="row">
+            <div class="col-6">
+                <label class="form-label" asp-for="c_noemalek">نوع مالک</label>
+                <select class="form-select form-select-sm" asp-for="c_noemalek">
+                    <option value="1">حقیقی</option>
+                    <option value="2">حقوقی</option>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="name">نام</label>
+                <input class="form-control form-control-sm" asp-for="name"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label" asp-for="family">نام خانوادگی</label>
+                <input class="form-control form-control-sm" asp-for="family"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="father">نام پدر</label>
+                <input class="form-control form-control-sm" asp-for="father"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label" asp-for="kodemeli">کدملی - شناسه ملی</label>
+                <input class="form-control form-control-sm" asp-for="kodemeli"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="sh_sh">شماره شناسنامه</label>
+                <input class="form-control form-control-sm" asp-for="sh_sh"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label" asp-for="mob">شماره همراه</label>
+                <input class="form-control form-control-sm" asp-for="mob"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="tel">شماره تلفن</label>
+                <input class="form-control form-control-sm" asp-for="tel"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label" asp-for="sahm_a">سهم عرصه</label>
+                <input class="form-control form-control-sm" asp-for="sahm_a"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="dong_a">دانگ عرصه</label>
+                <input class="form-control form-control-sm" asp-for="dong_a"/>
+
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label" asp-for="sahm_b">سهم اعیان</label>
+                <input class="form-control form-control-sm" asp-for="sahm_b"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="dong_b">دانگ اعیان</label>
+                <input class="form-control form-control-sm" asp-for="dong_b"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label" asp-for="ArzeshArse">ارزش عرصه</label>
+                <input class="form-control form-control-sm" asp-for="ArzeshArse"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="ArzeshAyan">ارزش اعیان</label>
+                <input class="form-control form-control-sm" asp-for="ArzeshAyan"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label class="form-label" asp-for="address">آدرس</label>
+                <input class="form-control form-control-sm" asp-for="address"/>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="AddOrUpdateMalekin">
+        ذخیره
+    </button>
+</div>

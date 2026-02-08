@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="rtl">
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="csp-nonce" content="@Context.Items["CSP-Nonce"]">
+
+    @{
+        var tokens = Antiforgery.GetAndStoreTokens(Context);
+    }
+
+    <meta name="csrf-token" content="@tokens.RequestToken" />
+
+    <title>نرم افزار شهرسازی - @ViewData["Title"]</title>
+
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet"/>
+    <link href="~/css/main.css" rel="stylesheet"/>
+    <link href="~/Theme/assets/css/styles.min.css" rel="stylesheet">
+    <link href="~/Theme/assets/css/icons.css" rel="stylesheet">
+    <link href="~/lib/notyf/css/notyf.min.css" rel="stylesheet"/>
+    <script src="~/lib/zxcvbn/zxcvbn.js"></script>
+
+</head>
+
+<body>
+<div class="page">
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+</div>
+
+<div class="scrollToTop pointer"> <span class="arrow"><i class="ri-arrow-up-s-fill fs-20"></i></span> </div>
+
+<script src="~/Theme/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/notyf/js/notyf.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Login/Login.js"></script>
+<script src="~/js/site.js"></script>
+<script src="~/js/Validation/ValidationMessage.js"></script>
+<script src="~/js/Validation/ValidationService.js"></script>
+
+@await RenderSectionAsync("Scripts", false)
+</body>
+
+</html>

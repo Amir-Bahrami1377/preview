@@ -1,0 +1,40 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Marahel.TaeedErsalDto
+
+<div class="modal-header">
+    <h6 class="modal-title">ارسال درخواست به مرحله بعدی</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form autocomplete="off">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-6">
+                <label class="form-label">شماره پرونده</label>
+                <input class="form-control form-control-sm" asp-for="shop" readonly="readonly"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label">شماره درخواست</label>
+                <input class="form-control form-control-sm" asp-for="shod" readonly="readonly"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label">مرحله جاری</label>
+                <input class="form-control form-control-sm" asp-for="marhale" readonly="readonly"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label">مرحله بعدی</label>
+                <select class="form-select form-select-sm" asp-for="codeMarhale"
+                        asp-items='@(new SelectList(Model.MarahelMandeh, "Index", "DisplayName"))'></select>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="TaeedErsalSubmit">
+        ارسال
+    </button>
+</div>

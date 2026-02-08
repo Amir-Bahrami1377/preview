@@ -1,0 +1,54 @@
+﻿@model RoleRestrictionDto
+
+<div class="modal-header">
+    <h6 class="modal-title">ایجاد</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <form method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Identity" />
+        <div class="row">
+            <div class="form-group col-6">
+                <label asp-for="FromDate" class="form-label">زمان شروع</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm flatpickr-input AmardDateTime" asp-for="FromDate" readonly="readonly">
+                    <button type="button" class="input-group-text ExpertInfoReadOnly AmardDateBtn">
+                        <i class="ri-calendar-line"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group col-6">
+                <label asp-for="ToDate" class="form-label">زمان پایان</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm flatpickr-input AmardDateTime" asp-for="ToDate" readonly="readonly">
+                    <button type="button" class="input-group-text ExpertInfoReadOnly AmardDateBtn">
+                        <i class="ri-calendar-line"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label class="form-label" asp-for="Roles">نقش ها</label>
+                <select class="form-select form-select-sm" asp-for="RoleId" asp-items="@Model.Roles"></select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label class="form-label" asp-for="Description">توضیحات</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="CreateRoleRestrictionSubmit">
+        ایجاد
+    </button>
+</div>

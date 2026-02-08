@@ -1,0 +1,95 @@
+﻿@model DarkhastDTO
+
+<div class="card custom-card">
+    <div class="card-header justify-content-between">
+        <div class="card-title">
+            اطلاعات درخواست
+            @if (!Model.IsValid)
+            {
+                <small class="text-danger"> ( داده های غیرمجاز ) </small>
+            }
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-3 col-sm-6">
+                <div class="list-group-item text-center p-2 shadow-sm rounded d-flex justify-content-between @(Model.IsValid ? "valid" : "not_valid")">
+                    <p class="mb-1 fw-semibold">شماره درخواست :</p>
+                    <span class="text-success">@Model.shodarkhast</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="list-group-item text-center p-2 shadow-sm rounded d-flex justify-content-between @(Model.IsValid ? "valid" : "not_valid")">
+                    <p class="mb-1 fw-semibold">شماره پرونده :</p>
+                    <span class="text-success">@Model.shop</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="list-group-item text-center p-2 shadow-sm rounded d-flex justify-content-between @(Model.IsValid ? "valid" : "not_valid")">
+                    <p class="mb-1 fw-semibold">نوع درخواست :</p>
+                    <span class="text-success">@Model.noedarkhast</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="list-group-item text-center p-2 shadow-sm rounded d-flex justify-content-between @(Model.IsValid ? "valid" : "not_valid")">
+                    <p class="mb-1 fw-semibold">نام متقاضی :</p>
+                    <span class="text-success">@Model.moteghazi</span>
+                </div>
+            </div>
+        </div>
+
+
+        @* <ul class="list-group mb-0">
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-fill">
+                        <p class="mb-0 fw-semibold">شماره درخواست</p>
+                    </div>
+                    <div>
+                        <span class="text-success">@Model.shodarkhast</span>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-fill">
+                        <p class="mb-0 fw-semibold">کد نوسازی</p>
+                    </div>
+                    <div>
+                        <span class="text-success">@Model.c_nosazi</span>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-fill">
+                        <p class="mb-0 fw-semibold">شماره پرونده</p>
+                    </div>
+                    <div>
+                        <span class="text-success">@Model.shop</span>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-fill">
+                        <p class="mb-0 fw-semibold">نوع درخواست</p>
+                    </div>
+                    <div>
+                        <span class="text-success">@Model.noedarkhast</span>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-fill">
+                        <p class="mb-0 fw-semibold">نام متقاضی</p>
+                    </div>
+                    <div>
+                        <span class="text-success">@Model.moteghazi</span>
+                    </div>
+                </div>
+            </li>
+        </ul> *@
+    </div>
+</div>

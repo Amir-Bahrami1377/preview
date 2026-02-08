@@ -1,0 +1,130 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model IReadOnlyList<UserDto>
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">سیستم کاربران</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">مدیریت کاربران</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                @{
+                    var CreateUser = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "UserManage_CreateUser");
+                    if (CreateUser)
+                    {
+                        <button class="btn btn-sm btn-success" id="CreateUser"> ایجاد کاربر جدید </button>
+                    }
+                }
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <table class="table text-nowrap table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="gridjs-th-fixed">نام کابری</th>
+                                <th scope="col" class="gridjs-th-fixed">نام</th>
+                                <th scope="col" class="gridjs-th-fixed">نام خانوادگی</th>
+                                <th scope="col" class="gridjs-th-fixed">ایمیل</th>
+                                <th scope="col" class="gridjs-th-fixed">وضعیت</th>
+                                <th scope="col" class="gridjs-th-fixed">دو مرحله</th>
+                                <th scope="col" class="gridjs-th-fixed">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody class="hover">
+                            @foreach (var user in Model)
+                            {
+
+                                <tr class="text-center">
+                                    <td class="@(user.IsValid ? "valid" : "not_valid")">@user.UserName</td>
+                                    <td class="@(user.IsValid ? "valid" : "not_valid")">@user.Name</td>
+                                    <td class="@(user.IsValid ? "valid" : "not_valid")">@user.Family</td>
+                                    <td class="@(user.IsValid ? "valid" : "not_valid")">@user.Email</td>
+                                    <td class="@(user.IsValid ? "valid" : "not_valid")">@(user.IsValid ? (user.LockoutEnabled ? "فعال" : "مسدود شده") : "داده نامعتبر")</td>
+                                    <td class="@(user.IsValid ? "valid" : "not_valid")">@(user.TwoFactorEnabled ? "فعال" : "غیرفعال")</td>
+                                    <td class="@(user.IsValid ? "valid" : "not_valid")">
+                                        <div class="hstack gap-2 flex-wrap">
+                                            @{
+                                                var EditUser = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "UserManage_EditUser");
+                                                var BlockUser = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "UserManage_BlockUser");
+                                                var EnableAuthenticator = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "EnableAuthenticator");
+
+                                                if (EditUser)
+                                                {
+                                                    <a class="text-warning fs-20 lh-1 pointer UserEditRow" id="User-@user.UserName" data-username="@user.UserName" title="ویرایش کاربر">
+                                                        <i class="ri-edit-box-fill"></i>
+                                                    </a>
+                                                }
+
+                                                if (BlockUser)
+                                                {
+                                                    @if (user.LockoutEnabled)
+                                                    {
+                                                        <a class="text-success fs-20 lh-1 pointer" asp-area="IdentityUser" asp-controller="User" asp-action="BlockUser" asp-route-userName="@user.UserName" title="غیر فعال کردن کاربر">
+                                                            <i class='bx bxs-check-circle'></i>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="text-danger fs-20 lh-1 pointer" asp-area="IdentityUser" asp-controller="User" asp-action="UnBlockUser" asp-route-userName="@user.UserName" title="فعال کردن کاربر">
+                                                            <i class='bx bxs-x-circle'></i>
+                                                        </a>
+                                                    }
+                                                }
+
+                                                if (EnableAuthenticator)
+                                                {
+                                                    @if (user.TwoFactorEnabled)
+                                                    {
+                                                        <a class="text-success fs-20 lh-1 pointer Disable2faRow" id="Disable-@user.UserName" data-username="@user.UserName" title="غیر فعال کردن تایید دومرحله ای">
+                                                            <i class='bx bxs-check-shield'></i>
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="text-danger fs-20 lh-1 pointer Enable2faRow" id="Enable-@user.UserName" data-username="@user.UserName" title="فعال کردن تایید دومرحله ای">
+                                                            <i class='bx bxs-shield-x'></i>
+                                                        </a>
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert"> موردی برای نمایش وجود ندارد! </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
+    <script src="~/lib/select2/select2.min.js"></script>
+
+    <script src="~/js/areas/identityuser/user.js"></script>
+    <script src="~/js/areas/identityuser/Manage.js"></script>
+}

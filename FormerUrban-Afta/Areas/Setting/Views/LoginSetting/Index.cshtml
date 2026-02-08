@@ -1,0 +1,97 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model FormerUrban_Afta.DataAccess.DTOs.Setting.LoginSettingDto
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">مدیریت نرم افزار</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">مدیریت لاگین</li>
+            </ol>
+        </nav>
+
+    </div>
+</div>
+
+<input type="hidden" id="messages" value='@(Model.message != null ? Json.Serialize(Model.message) : "[]")' />
+<input type="hidden" id="PageLink" value="Index" />
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    مدیریت لاگین
+                    @if (!Model.IsValid)
+                    {
+                        <small class="text-danger"> ( داده های غیرمجاز ) </small>
+                    }
+                </div>
+            </div>
+            <div class="card-body d-flex align-items-start">
+
+                <form method="post" autocomplete="off" class="w-100" asp-area="Setting" 
+                      asp-controller="LoginSetting" asp-action="Submit" id="LoginSettingForm">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="MaximumSessions">حداکثر تعداد نشست</label>
+                            <input class="form-control form-control-sm LoginSettingReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="MaximumSessions" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="RetryLoginCount">تلاش برای لاگین ناموفق</label>
+                            <input class="form-control form-control-sm LoginSettingReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="RetryLoginCount" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="KhatemeSessionAfterMinute">خاتمه نشست (دقیقه)</label>
+                            <input class="form-control form-control-sm LoginSettingReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="KhatemeSessionAfterMinute" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="UnblockingUserTime">رفع مسدود بودن کاربر (دقیقه)</label>
+                            <input class="form-control form-control-sm LoginSettingReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="UnblockingUserTime" />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="PasswordLength">طول رمز عبور</label>
+                            <input class="form-control form-control-sm LoginSettingReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="PasswordLength" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="MaximumAccessDenied">حداکثر تعداد درخواست دسترسی رد شده</label>
+                            <input class="form-control form-control-sm LoginSettingReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="MaximumAccessDenied"/>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="RequestRateLimitter">حداکثر تعداد درخواست در 30 ثانیه</label>
+                            <input class="form-control form-control-sm LoginSettingReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="RequestRateLimitter"/>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center mt-3 col-12">
+                        @{
+                            var EditLogin = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "LoginSetting_Edit");
+                            if (EditLogin)
+                            {
+                                <a class="btn btn-sm btn-warning mx-1" id="Edit">ویرایش اطلاعات</a>
+                                <a class="btn btn-sm btn-danger mx-1" id="Cancel">انصراف</a>
+                                <button type="submit" class="btn btn-sm btn-success mx-1" id="Submit">ذخیره اطلاعات</button>
+                            }
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/Setting/LoginSetting.js"></script>
+}

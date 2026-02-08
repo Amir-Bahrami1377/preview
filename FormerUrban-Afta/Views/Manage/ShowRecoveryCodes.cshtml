@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Recovery Codes";
+    var recoveryCodes = TempData["RecoveryCodes"] as string[];
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (recoveryCodes == null || !recoveryCodes.Any())
+{
+    <div class="alert alert-danger">
+        No recovery codes available.
+    </div>
+}
+else
+{
+    <div class="alert alert-success">
+        <p>Save these recovery codes somewhere safe. Each code can only be used once.</p>
+    </div>
+
+    <ul class="list-group">
+        @foreach (var code in recoveryCodes)
+        {
+            <li class="list-group-item">@code</li>
+        }
+    </ul>
+}
+
+<a asp-action="TwoFactorAuthentication" class="btn btn-primary mt-3">Back to 2FA Settings</a>

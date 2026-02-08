@@ -1,0 +1,126 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Reports.AuditViewDto
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+
+    <div>
+        <p class="fw-semibold fs-18 mb-0">گزارشات نرم افزار</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">گزارشات تغییرات</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">جستجو</div>
+            </div>
+            <div class="card-body">
+                <form class="w-100" method="Post" autocomplete="off" asp-area="Reports" asp-controller="Audit" asp-action="Index" id="AuditSearchForm">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="col-3">
+                            <select class="form-select form-select-sm" asp-for="Search.UserId" asp-items="Model.Search.Users" name="UserId">
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-sm" asp-for="Search.TableId" asp-items="Model.Search.Tables" name="TableId">
+                            </select>
+                        </div>
+                        <div class="form-group col-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm flatpickr-input AmardDate" readonly="readonly" placeholder="تاریخ" name="Date" id="Date">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <input class="form-control form-control-sm" placeholder="IP کاربر" asp-for="Search.Ip" name="Ip" id="Ip" />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        
+                        <div class="col-3">
+                            <input class="form-control form-control-sm" placeholder="شناسه گزارش" asp-for="Search.EntityId" name="EntityId" id="EntityId" />
+                        </div>
+                        <div class="col-3">
+                            <input class="form-control form-control-sm" placeholder="تعداد رکورد گزارش" asp-for="Search.TotalCount" name="TotalCount" />
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-sm btn-danger clearDateBtn">پاک کردن تاریخ</button>
+                            <button type="submit" class="btn btn-sm btn-success">جستجو</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">گزارشات</div>
+            </div>
+            <div class="card-body">
+                <table id="responsiveDataTable" class="table table-bordered table-hover text-wrap align-middle w-100 DataTable">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="gridjs-th-fixed">#</th>
+                            <th scope="col" class="gridjs-th-fixed">Ip</th>
+                            <th scope="col" class="gridjs-th-fixed">نام کاربر</th>
+                            <th scope="col" class="gridjs-th-fixed">فرم</th>
+                            <th scope="col" class="gridjs-th-fixed">عملیات</th>
+                            <th scope="col" class="gridjs-th-fixed">فیلد</th>
+                            <th scope="col" class="gridjs-th-fixed">مقدار اصلی</th>
+                            <th scope="col" class="gridjs-th-fixed">مقدار جدید</th>
+                            <th scope="col" class="gridjs-th-fixed">تاریخ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="hover">
+                        @foreach (var item in Model.Audit)
+                        {
+                            <tr>
+                                <th class="@(item.IsValid ? "valid" : "not_valid")">@item.EntityId</th>
+                                <th class="@(item.IsValid ? "valid" : "not_valid")">@item.IpAddress</th>
+                                <th class="@(item.IsValid ? "valid" : "not_valid")">@item.FullName</th>
+                                <th class="@(item.IsValid ? "valid" : "not_valid")">@item.TableName</th>
+                                <th class="@(item.IsValid ? "valid" : "not_valid")">@item.OperationName</th>
+                                <th class="@(item.IsValid ? "valid" : "not_valid")">@item.Field</th>
+                                <th class="@(item.IsValid ? "valid" : "not_valid") text-break">@item.OriginValue</th>
+                                <th class="@(item.IsValid ? "valid" : "not_valid") text-break">@item.CurrentValue</th>
+                                <th class="@(item.IsValid ? "valid" : "not_valid")">@item.CreationDate</th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link href="~/lib/persiandatepicker/persian-datepicker.css" rel="stylesheet" />
+
+    <script src="~/lib/persiandatepicker/persian-date.js"></script>
+    <script src="~/lib/persiandatepicker/persian-datepicker.js"></script>
+
+    <script src="~/js/tools/datepeaker.js"></script>
+
+    <link href="~/theme/assets/libs/datatable/datatables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/theme/assets/libs/datatable/responsive.bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Theme/assets/libs/datatable/jquery.datatables.min.js"></script>
+    <script src="~/Theme/assets/libs/datatable/datatables.bootstrap5.min.js"></script>
+    <script src="~/Theme/assets/libs/datatable/datatables.responsive.min.js"></script>
+
+    <script src="~/js/areas/reports/Audit.js"></script>
+}

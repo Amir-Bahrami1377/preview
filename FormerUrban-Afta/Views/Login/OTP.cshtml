@@ -1,0 +1,55 @@
+﻿@using FormerUrban_Afta.DataAccess.DTOs.Login
+@model AuthRequest
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "تایید دو مرحله ای";
+}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
+        <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
+            <div class="card custom-card shadow-lg">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <p class="h3 fw-bold mb-2 text-primary">ورود با کد OTP</p>
+                        <a class="text-muted op-7 fw-normal" asp-area="" asp-controller="Login" asp-action="Index">نرم افزار شهرسازی آمارد</a>
+                    </div>
+
+                    <form asp-area="" asp-controller="Login" asp-action="Otp" autocomplete="off" id="OtpForm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="Message" value="@ViewBag.message" />
+                        <input type="hidden" asp-for="UserName" />
+                        <input type="hidden" asp-for="Password" />
+                        <input type="hidden" asp-for="ExpireTime" />
+
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Code" class="form-label fw-semibold">کد OTP</label>
+                            <input asp-for="Code" class="form-control form-control-lg no-spinner" placeholder="شماره کد OTP خود را وارد کنید">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <label class="form-label me-2">کد کپچا :</label>
+                                <div>
+                                    <a class="pointer me-2"><i id="RefreshCapcha" class='bx bx-sync fs-20'></i></a>
+                                    <img id="captchaImage" src="@Url.Action("GenerateCaptcha", "Login")"/>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control mt-2" placeholder="لطفا کد کپچا را وارد کنید" name="CaptchaCode" id="captchaCode" />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">ورود به سیستم</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/login/otp.js"></script>
+}

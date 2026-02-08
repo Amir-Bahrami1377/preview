@@ -1,0 +1,65 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Setting.BlockedIPRangeDto
+
+<div class="modal-header">
+    <h6 class="modal-title">ایجاد رنج IP جدید</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <form method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Identity"/>
+        <div class="row">
+            <div class="form-group col-6">
+                <label asp-for="FromDate" class="form-label">زمان شروع</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm flatpickr-input AmardDateTime pointer" asp-for="FromDate" readonly="readonly">
+                    <button type="button" class="input-group-text ExpertInfoReadOnly AmardDateBtn">
+                        <i class="ri-calendar-line"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group col-6">
+                <label asp-for="ToDate" class="form-label">زمان پایان</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm flatpickr-input AmardDateTime pointer" asp-for="ToDate" readonly="readonly">
+                    <button type="button" class="input-group-text ExpertInfoReadOnly AmardDateBtn">
+                        <i class="ri-calendar-line"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <label class="form-label" asp-for="IPRange">رنج IP</label>
+                <input type="text" class="form-control form-control-sm" asp-for="IPRange"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="alert alert-danger" role="alert">
+                    <ul class="mb-0">
+                        <li>192.168.10.0/24</li>
+                        <li>192.168.1.1-192.168.1.255</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12">
+                <label class="form-label" asp-for="IPRange">توضیحات</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="CreateIpBtnSubmit">
+        ایجاد
+    </button>
+</div>

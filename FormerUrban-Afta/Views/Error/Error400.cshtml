@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_ErrorLayout";
+}
+
+<p class="error-text mb-sm-0 mb-2">400</p>
+<p class="fs-18 fw-semibold mb-3">درخواست نامعتبر!</p>
+<div class="row justify-content-center mb-5">
+    <div class="col-xl-6">
+        <p class="mb-0 op-7">
+            1. اطلاعات ارسالی ناقص یا اشتباه است.
+            <br />
+            2. لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید. <br /> @(ViewBag.actionId != "" ? $"کد خطا : {ViewBag.actionId}" : "")
+        </p>
+    </div>
+</div>
+<a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-primary">
+    بازگشت به نرم‌افزار
+    <i class="ri-arrow-left-line align-middle ms-1 d-inline-block"></i>
+</a>

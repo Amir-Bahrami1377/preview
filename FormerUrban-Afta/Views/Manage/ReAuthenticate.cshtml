@@ -1,0 +1,25 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Login.ReAuthenticateDto
+@{
+    ViewData["Title"] = "Re-authenticate";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Please enter your password to continue.</p>
+
+<form asp-action="ReAuthenticate" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="ReturnUrl"/>
+
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input asp-for="Password" class="form-control" type="password"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Verify</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,109 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model List<FormerUrban_Afta.DataAccess.DTOs.Setting.RoleRestrictionDto>
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">مدیریت نرم افزار</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">مدیریت نقش های مسدود شده</li>
+            </ol>
+        </nav>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                @{
+                    var RoleRestriction_Create = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "RoleRestriction_Create");
+                    if (RoleRestriction_Create)
+                    {
+                        <button class="btn btn-sm btn-success" id="CreateRoleRestriction"> ایجاد </button>
+                    }
+                }
+
+            </div>
+            <div class="card-body">
+                @if (Model != null)
+                {
+                    <table class="table text-nowrap table-bordered table-hover AmardDataTable">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="gridjs-th-fixed">مرحله</th>
+                                <th scope="col" class="gridjs-th-fixed">تاریخ پایان</th>
+                                <th scope="col" class="gridjs-th-fixed">تاریخ شروع</th>
+                                <th scope="col" class="gridjs-th-fixed">توضیحات</th>
+                                <th scope="col" class="gridjs-th-fixed">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody class="hover">
+                            @foreach (var Ip in Model)
+                            {
+                                <tr class="text-center">
+                                    <td class="@(Ip.IsValid ? "valid" : "not_valid")">@Ip.RoleText</td>
+                                    <td class="@(Ip.IsValid ? "valid" : "not_valid")">@Ip.ToDate</td>
+                                    <td class="@(Ip.IsValid ? "valid" : "not_valid")">@Ip.FromDate</td>
+                                    <td class="@(Ip.IsValid ? "valid" : "not_valid")">@Ip.Description</td>
+                                    <td class="@(Ip.IsValid ? "valid" : "not_valid")">
+                                        <div class="hstack gap-2 flex-wrap">
+                                            @{
+                                                var RoleRestriction_Edit = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "RoleRestriction_Edit");
+                                                var RoleRestriction_Delete = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "RoleRestriction_Delete");
+
+                                                if (RoleRestriction_Edit)
+                                                {
+                                                    <a class="text-warning fs-20 lh-1 pointer RoleRestrictionEditRow" id="Ip-@Ip.Identity" data-identity="@Ip.Identity">
+                                                        <i class="ri-edit-box-fill"></i>
+                                                    </a>
+                                                }
+                                                if (RoleRestriction_Delete)
+                                                {
+                                                    <a class="text-danger fs-20 lh-1 pointer RoleRestrictionDeleteRow" id="Ip-@Ip.Identity" data-identity="@Ip.Identity">
+                                                        <i class="ri-delete-bin-6-fill"></i>
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert"> موردی برای نمایش وجود ندارد! </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <link href="~/theme/assets/libs/datatable/datatables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/theme/assets/libs/datatable/responsive.bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Theme/assets/libs/datatable/jquery.datatables.min.js"></script>
+    <script src="~/Theme/assets/libs/datatable/datatables.bootstrap5.min.js"></script>
+    <script src="~/Theme/assets/libs/datatable/datatables.responsive.min.js"></script>
+
+    <link href="~/lib/persiandatepicker/persian-datepicker.css" rel="stylesheet" />
+
+    <script src="~/lib/persiandatepicker/persian-date.js"></script>
+    <script src="~/lib/persiandatepicker/persian-datepicker.js"></script>
+
+    <script src="~/js/tools/datepeaker.js"></script>
+    <script src="~/js/areas/setting/RoleRestriction.js"></script>
+}

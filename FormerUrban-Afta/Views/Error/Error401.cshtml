@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_ErrorLayout";
+}
+
+<p class="error-text mb-sm-0 mb-2">401</p>
+<p class="fs-18 fw-semibold mb-3">شما وارد سیستم نشده‌اید!</p>
+<div class="row justify-content-center mb-5">
+    <div class="col-xl-6">
+        <p class="mb-0 op-7">
+            1. برای مشاهده این صفحه ابتدا باید وارد سیستم شوید.
+            <br />
+            2. لطفاً وارد شوید و دوباره تلاش کنید. <br /> @(ViewBag.actionId != "" ? $"کد خطا : {ViewBag.actionId}" : "")
+        </p>
+    </div>
+</div>
+<a asp-area="" asp-controller="Login" asp-action="Index" class="btn btn-primary">
+    ورود به سیستم
+    <i class="ri-login-box-line align-middle ms-1 d-inline-block"></i>
+</a>

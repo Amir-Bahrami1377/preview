@@ -1,0 +1,80 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model List<ExpertDto>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                @{
+                    var createExpert = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Visit_CreateExpert");
+                    if (createExpert)
+                    {
+                        <button class="btn btn-sm btn-success" id="CreateExpert"> ایجاد مامور بازدید </button>
+                    }
+                }
+
+                <input type="hidden" value="@ViewBag.requestNumber" id="ExpertRequestNumber" />
+                <input type="hidden" value="@ViewBag.message" id="ExpertMessage" />
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <table class="table text-nowrap table-bordered table-hover AmardDataTable">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="gridjs-th-fixed">نام</th>
+                                <th scope="col" class="gridjs-th-fixed">نام خانوادگی</th>
+                                <th scope="col" class="gridjs-th-fixed">تاریخ بازدید</th>
+                                <th scope="col" class="gridjs-th-fixed">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody class="hover">
+                            @foreach (var item in Model)
+                            {
+                                <tr class="text-center">
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">@item.Name</td>
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">@item.Family</td>
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">@item.DateVisit</td>
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">
+                                        <div class="hstack gap-2 flex-wrap">
+                                            @{
+                                                var editExpert = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Visit_EditExpert");
+                                                var deleteExpert = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Visit_DeleteExpert");
+
+                                                if (editExpert)
+                                                {
+                                                    <a class="text-warning fs-20 lh-1 pointer ExpertEditRow" id="Expert-Edit-@item.Identity" data-identity="@item.Identity">
+                                                        <i class="ri-edit-box-fill"></i>
+                                                    </a>
+                                                }
+
+                                                if (deleteExpert)
+                                                {
+                                                    <a class="text-danger fs-20 lh-1 pointer ExpertDeleteRow" id="Expert-Delete-@item.Identity" data-identity="@item.Identity">
+                                                        <i class="ri-delete-bin-6-fill"></i>
+                                                    </a>
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert"> موردی برای نمایش وجود ندارد! </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/js/areas/Marahel/expert/expert.js"></script>
+}

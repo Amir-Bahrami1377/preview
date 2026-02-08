@@ -1,0 +1,48 @@
+﻿@model ParvandehDto
+
+<div class="modal-header">
+    <h6 class="modal-title" id="ParvandehCrateTitle"></h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <form class="d-flex gap-2" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <input class="d-none" asp-for="Index" id="CreateParvandehIndex"/>
+        <input class="d-none" asp-for="shop" id="CreateParvandehParentShop"/>
+
+        <div>
+            <label class="form-label">آپارتمان</label>
+            <input class="form-control form-control-sm" asp-for="apar" id="CreateParvandehAparteman"/>
+        </div>
+        <div>
+            <label class="form-label">ساختمان</label>
+            <input class="form-control form-control-sm" asp-for="sakhteman" id="CreateParvandehSakhteman"/>
+        </div>
+        <div>
+            <label class="form-label">ملک</label>
+            <input class="form-control form-control-sm" asp-for="Melk" id="CreateParvandehMelk"/>
+        </div>
+        <div>
+            <label class="form-label">بلوک</label>
+            <input class="form-control form-control-sm" asp-for="blok" id="CreateParvandehBlok" />
+        </div>
+        <div>
+            <label class="form-label">محله</label>
+            <input class="form-control form-control-sm" asp-for="hoze" id="CreateParvandehMahaleh" />
+        </div>
+        <div>
+            <label class="form-label">منطقه</label>
+            <input class="form-control form-control-sm" asp-for="mantaghe" id="CreateParvandehMantaghe" />
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="CreateParvandehBtnSubmit">
+        ایجاد
+    </button>
+</div>

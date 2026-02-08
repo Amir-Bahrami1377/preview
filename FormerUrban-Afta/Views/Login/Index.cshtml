@@ -1,0 +1,49 @@
+﻿@using FormerUrban_Afta.DataAccess.DTOs.Login
+@model AuthRequest
+@{
+    Layout = "_LoginLayout";
+    ViewData["Title"] = "فرم ورود";
+}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center authentication authentication-basic h-100">
+        <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
+            <div class="card custom-card shadow-lg">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <p class="h3 fw-bold mb-2 text-primary">فرم ورود</p>
+                        <a class="text-muted op-7 fw-normal" asp-area="" asp-controller="Login" asp-action="Index">نرم افزار شهرسازی آمارد</a>
+                    </div>
+                    <form asp-area="" asp-controller="login" asp-action="TwoStepLogin" autocomplete="off" id="LoginForm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="Message" value="@ViewBag.message" />
+
+                        <div class="form-group mb-3">
+                            <label asp-for="UserName" class="form-label fw-semibold">نام کاربری</label>
+                            <input asp-for="UserName" class="form-control form-control-lg" placeholder="نام کاربری خود را وارد کنید" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Password" class="form-label">رمز عبور</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control form-control-lg" asp-for="Password" placeholder="رمز عبور خود را وارد کنید">
+                                <button class="btn btn-sm btn-primary d-flex align-items-center" type="button" id="PasswordEyeBtn">
+                                    <i class="ri-eye-off-line align-middle fs-14" id="PasswordEye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-start mt-3 mb-4">
+                            <a asp-area="" asp-controller="Login" asp-action="ForgetPassword" class="text-primary">رمز عبور خود را فراموش کرده ام!</a>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">ورود به نرم افزار</button>
+                        </div>
+                        <div class="text-center mt-3">
+                            <p class="text-muted op-7 fw-normal">نسخه : 10.0.2</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

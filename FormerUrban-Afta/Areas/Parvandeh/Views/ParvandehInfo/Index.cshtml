@@ -1,0 +1,53 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@model ParvandehDto
+@{
+    Layout = "_Layout";
+}
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">اطلاعات پرونده</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">اطلاعات پرونده</li>
+            </ol>
+        </nav>
+        <input type="hidden" value="@Model.shop" id="FileInformationId" />
+    </div>
+    <div class="btn-list mt-md-0 mt-2">
+        @{
+            var CreateParvandeh = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_CreateParvandeh");
+
+            if (CreateParvandeh)
+            {
+                <button class="btn btn-sm btn-success dropdown-toggle" type="button" id="CreateParvandehBtn"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    ایجاد پرونده
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="CreateParvandehBtn">
+                    <li><a class="dropdown-item d-flex justify-content-center pointer" id="CreateMelk"> ملک </a></li>
+                    <li><a class="dropdown-item d-flex justify-content-center pointer" id="CreateSakhteman"> ساختمان </a></li>
+                    <li><a class="dropdown-item d-flex justify-content-center pointer" id="CreateAparteman"> آپارتمان </a></li>
+                </ul>
+            }
+        }
+    </div>
+</div>
+<input type="hidden" id="RequestVerificationToken" value="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
+<div class="row">
+    <div class="col-7">
+        @await Component.InvokeAsync("ParvandehTree", new { shop = Model.shop })
+    </div>
+    <div class="col-5" id="ParvandehInfo"></div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/areas/parvandeh/parvandeh.js"></script>
+    <script src="~/js/tools/treeview.js"></script>
+}

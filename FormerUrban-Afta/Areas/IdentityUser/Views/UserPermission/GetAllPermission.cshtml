@@ -1,0 +1,29 @@
+﻿@model List<UserPermissionDto>
+
+
+<table class="table table-bordered text-nowrap table-hover" id="UserPermissionTable">
+    <thead class="table-primary">
+        <tr>
+            <th>نوع دسترسی</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th class="@(item.IsValid ? "valid" : "not_valid")">@item.Permission_Description</th>
+                <th class="@(item.IsValid ? "valid" : "not_valid")">
+                    <input type="radio" class="btn-check permission-radio" name="options-outlined_@item.PermissionId" id="success-outlined_@item.PermissionId" data-id="@item.PermissionId" data-name = "@item.Permission_Description" value="true" @(item.Access ? "checked" : "")>
+                    <label class="btn btn-outline-success btn-sm" for="success-outlined_@item.PermissionId">مجاز</label>
+
+                    <input type="radio" class="btn-check permission-radio" name="options-outlined_@item.PermissionId" id="danger-outlined_@item.PermissionId" data-id="@item.PermissionId" data-name="@item.Permission_Description" value="false" @(!item.Access ? "checked" : "")>
+                    <label class="btn btn-outline-danger btn-sm" for="danger-outlined_@item.PermissionId">غیر مجاز</label>
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

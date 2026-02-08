@@ -1,0 +1,301 @@
+﻿@inject IPermissionService PermissionService
+
+<aside class="app-sidebar sticky" id="sidebar">
+    <div class="main-sidebar-header">
+        <a class="header-logo">
+            نرم افزار شهرسازی آمارد
+        </a>
+    </div>
+    <div class="main-sidebar" id="sidebar-scroll">
+        <nav class="main-menu-container nav nav-pills flex-column sub-open">
+            <div class="slide-left" id="slide-left">
+                <svg xmlns="" fill="#7b8191"
+                     width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                </svg>
+            </div>
+
+            <ul class="main-menu">
+                @{
+                    var kartabl = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_Kartabl");
+                    if (kartabl)
+                    {
+                        <li class="slide">
+                            <a class="side-menu__item" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bx bx-home side-menu__icon"></i> <span class="side-menu__label">کارتابل</span>
+                            </a>
+                        </li>
+                    }
+                }
+                @* اطلاعات پرونده *@
+                @{
+                    var parvandehInfo = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_ParvandehInfo");
+                    var searchParvandeh = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_SearchParvandeh");
+
+                    if (parvandehInfo || searchParvandeh)
+                    {
+                        <li class="slide has-sub">
+                            <a class="side-menu__item">
+                                <i class="bx bxs-folder-open side-menu__icon"></i>
+                                <span class="side-menu__label">پرونده</span>
+                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                            </a>
+                            <ul class="slide-menu child2">
+                                @if (parvandehInfo)
+                                {
+                                    <li class="slide">
+                                        <form method="post" asp-area="Parvandeh" asp-controller="ParvandehInfo" asp-action="Index">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="side-menu__item btn btn-link w-100 text-start">
+                                                اطلاعات پرونده
+                                            </button>
+                                        </form>
+                                    </li>
+
+                                }
+                                @if (searchParvandeh)
+                                {
+                                    <li class="slide">
+                                        <form method="post" asp-area="Parvandeh" asp-controller="ParvandehInfo" asp-action="SearchParvandeh">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="side-menu__item btn btn-link w-100 text-start">جستجوی پرونده</button>
+                                        </form>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                }
+
+                @* سیستم کاربران *@
+                @{
+                    var UserMenu = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_User");
+                    var UserPermission = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_UserPermission");
+                    var RolePermission = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_RolePermission");
+
+                    if (UserMenu || UserPermission || RolePermission)
+                    {
+                        <li class="slide has-sub">
+                            <a class="side-menu__item">
+                                <i class="bx bxs-user-rectangle side-menu__icon"></i>
+                                <span class="side-menu__label">سیستم کاربران</span>
+                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                            </a>
+                            <ul class="slide-menu child2">
+
+                                @if (UserMenu)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="IdentityUser" asp-controller="User" asp-action="Index">مدیریت کاربران</a>
+                                    </li>
+                                }
+                                @if (UserPermission)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="IdentityUser" asp-controller="UserPermission" asp-action="Index">دسترسی کاربران</a>
+                                    </li>
+                                }
+                                @if (RolePermission)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="IdentityUser" asp-controller="RolePermission" asp-action="Index">دسترسی نقش ها</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+
+                @* بایگانی *@
+                @{
+                    var baygani = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_Baygani");
+                    @if (baygani)
+                    {
+                        <li class="slide">
+                            <a class="side-menu__item pointer" asp-area="Marahel" asp-controller="Baygani" asp-action="Index">
+                                <i class="bx bxs-file-archive side-menu__icon"></i>
+                                <span class="side-menu__label">بایگانی</span>
+                            </a>
+                        </li>
+                    }
+                }
+
+                @* مدیریت نرم افزار *@
+                @{
+                    var SmsSetting = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_SmsSetting");
+                    var LoginSetting = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_LoginSetting");
+                    var IPBlockList = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_IPBlockList");
+                    var IPWhiteList = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_IPWhiteList");
+                    var EventLogFilter = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_EventLogFilter");
+                    var EventLogThreshold = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_EventLogThreshold");
+                    var Menu_RoleRestriction = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_RoleRestriction");
+                    var Menu_ActivityLogFilters = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_ActivityLogFilters");
+                    var Menu_AuditFilters = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_AuditFilters");
+
+                    if (SmsSetting || LoginSetting || IPBlockList || IPWhiteList || EventLogFilter || EventLogThreshold || Menu_RoleRestriction || Menu_ActivityLogFilters || Menu_AuditFilters)
+                    {
+                        <li class="slide has-sub">
+                            <a class="side-menu__item">
+                                <i class="bx bxs-cog side-menu__icon"></i>
+                                <span class="side-menu__label">مدیریت نرم افزار</span>
+                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                            </a>
+                            <ul class="slide-menu child1" data-popper-placement="bottom">
+                                @if (SmsSetting)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="Setting" asp-controller="SmsSetting" asp-action="Index">مدیریت پنل پیامکی</a>
+                                    </li>
+                                }
+
+                                @if (LoginSetting || IPBlockList || IPWhiteList)
+                                {
+                                    <li class="slide has-sub">
+                                        <a class="side-menu__item">
+                                            مدیریت لاگین
+                                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                                        </a>
+                                        <ul class="slide-menu child2">
+                                            @if (LoginSetting)
+                                            {
+                                                <li class="slide">
+                                                    <a class="side-menu__item" asp-area="Setting" asp-controller="LoginSetting" asp-action="Index">مدیریت لاگین</a>
+                                                </li>
+                                            }
+
+                                            @if (IPBlockList)
+                                            {
+                                                <li class="slide">
+                                                    <a class="side-menu__item" asp-area="Setting" asp-controller="IPBlockList" asp-action="Index">IP مسدود شده</a>
+                                                </li>
+                                            }
+                                            @if (IPWhiteList)
+                                            {
+                                                <li class="slide">
+                                                    <a class="side-menu__item" asp-area="Setting" asp-controller="IPWhiteList" asp-action="Index">IP مجاز دسترسی</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+
+                                }
+
+                                @if (EventLogFilter)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="Setting" asp-controller="EventLogFilter" asp-action="Index">فیلتر رویداد های ممیزی</a>
+                                    </li>
+                                }
+
+                                @if (EventLogThreshold)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="Setting" asp-controller="EventLogThreshold" asp-action="Index">حد آستانه رویداد ها ممیزی</a>
+                                    </li>
+                                }
+
+                                @if (Menu_RoleRestriction)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="Setting" asp-controller="RoleRestriction" asp-action="Index">نقش های مسدود شده</a>
+                                    </li>
+                                }
+
+                                @if (Menu_ActivityLogFilters)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="Setting" asp-controller="ActivityLogFilters" asp-action="Index">گزارشات فعال</a>
+                                    </li>
+                                }
+
+                                @if (Menu_AuditFilters)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="Setting" asp-controller="AuditFilter" asp-action="Index">فیلتر تغییرات</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+
+                @* گزارشات *@
+                @{
+                    var Menu_UserLogined = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_UserLogined");
+                    var Account = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Menu_Account");
+                    var Regular = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Reports_Regular");
+                    var SmsLog = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Reports_Sms");
+                    var AuditLog = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Reports_Audit");
+
+                    if (Regular || Account || Menu_UserLogined || SmsLog || AuditLog)
+                    {
+                        <li class="slide has-sub">
+                            <a class="side-menu__item">
+                                <i class="bx bxs-news side-menu__icon"></i>
+                                <span class="side-menu__label">گزارشات نرم افزار</span>
+                                <i class="fe fe-chevron-right side-menu__angle"></i>
+                            </a>
+                            <ul class="slide-menu child2">
+                                @if (Menu_UserLogined)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="Setting" asp-controller="UserLogined" asp-action="Index">لاگین های کاربران</a>
+                                    </li>
+                                }
+                                @if (Account)
+                                {
+                                    <li class="slide">
+                                        <a class="side-menu__item" asp-area="Setting" asp-controller="LoginSetting" asp-action="Account">نشست های کاربر</a>
+                                    </li>
+                                }
+                                @if (Regular)
+                                {
+                                    <li class="slide">
+                                        <form method="post" asp-area="Reports" asp-controller="RegularReports" asp-action="Index">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="side-menu__item btn btn-link w-100 text-start">
+                                                گزارشات عادی
+                                            </button>
+                                        </form>
+                                    </li>
+                                }
+                                @if (SmsLog)
+                                {
+                                    <li class="slide">
+                                        <form method="post" asp-area="Reports" asp-controller="SmsReports" asp-action="Index">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="side-menu__item btn btn-link w-100 text-start">
+                                                گزارشات پیامک
+                                            </button>
+                                        </form>
+                                    </li>
+                                }
+                                @if (AuditLog)
+                                {
+                                    <li class="slide">
+                                        <form method="post" asp-area="Reports" asp-controller="Audit" asp-action="Index">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="side-menu__item btn btn-link w-100 text-start">
+                                                گزارشات تغییرات
+                                            </button>
+                                        </form>
+                                    </li>
+                                }
+
+                            </ul>
+                        </li>
+                    }
+
+                }
+
+            </ul>
+            <div class="slide-right" id="slide-right">
+                <svg xmlns="" fill="#7b8191"
+                     width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                </svg>
+            </div>
+        </nav>
+    </div>
+</aside>

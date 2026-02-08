@@ -1,0 +1,54 @@
+﻿@model ActivityLogFiltersDto
+
+<div class="modal-header">
+    <h6 class="modal-title">ایجاد</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <form method="post" autocomplete="off">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Identity" />
+        <div class="row">
+            <div class="col-12">
+                <label class="form-label" asp-for="FormName">نام فرم</label>
+                <select class="form-select form-select-sm" asp-for="FormName" asp-items="@Model.Tables"></select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-3">
+                <div class="form-check form-switch">
+                    <label class="form-label" asp-for="GetStatus"> نمایش</label>
+                    <input class="form-check-input pointer SmsSettingReadOnly" type="checkbox" checked="@(Model.GetStatus)" id="GetStatus" value="true">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-check form-switch">
+                    <label class="form-label" asp-for="AddStatus"> ایجاد</label>
+                    <input class="form-check-input pointer SmsSettingReadOnly" type="checkbox" checked="@(Model.AddStatus)" id="AddStatus" value="true">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-check form-switch">
+                    <label class="form-label" asp-for="UpdateStatus"> ویرایش</label>
+                    <input class="form-check-input pointer SmsSettingReadOnly" type="checkbox" checked="@(Model.UpdateStatus)" id="UpdateStatus" value="true">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-check form-switch">
+                    <label class="form-label" asp-for="DeleteStatus"> حذف</label>
+                    <input class="form-check-input pointer SmsSettingReadOnly" type="checkbox" checked="@(Model.DeleteStatus)" id="DeleteStatus" value="true">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="CreateActivityLogFiltersSubmit">
+        ایجاد
+    </button>
+</div>

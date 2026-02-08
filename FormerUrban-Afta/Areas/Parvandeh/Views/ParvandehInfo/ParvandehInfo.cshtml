@@ -1,0 +1,31 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Parvandeh.ParvandehDto
+
+<div class="card custom-card">
+    <div class="card-header justify-content-between">
+        <div class="card-title">اطلاعات پرونده انتخاب شده</div>
+    </div>
+    <div class="card-body">
+        <ul class="list-group mb-0">
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-fill">
+                        <p class="mb-0 fw-semibold">کد نوسازی</p>
+                    </div>
+                    <div>
+                        <span class="text-success">@Model.codeN</span>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-fill">
+                        <p class="mb-0 fw-semibold">شماره پرونده</p>
+                    </div>
+                    <div>
+                        <span class="text-success">@Model.shop</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,254 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model List<Dv_karbariDTO>
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        @if (string.IsNullOrWhiteSpace(ViewBag.parvandehOrBazdid))
+        {
+            @if (ViewBag.shod > 0)
+            {
+                @if (ViewBag.NoeParvandeh == "sakhteman")
+                {
+                    <p class="fw-semibold fs-18 mb-0">اطلاعات بازدید ساختمان</p>
+                }
+                else if (ViewBag.NoeParvandeh == "aparteman")
+                {
+                    <p class="fw-semibold fs-18 mb-0">اطلاعات بازدید آپارتمان</p>
+                }
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item pointer">
+                            <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                        </li>
+                        <li class="breadcrumb-item pointer">
+                            <form method="post" asp-area="Marahel" asp-controller="Visit" asp-action="Index" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="shop" value="@ViewBag.dShop" />
+                                <input type="hidden" name="shod" value="@ViewBag.shod" />
+                                <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhale" />
+                                <button type="submit" class="btn btn-link p-0 m-0 text-decoration-none text-primary">مرحله بازدید</button>
+                            </form>
+                        </li>
+                        @if (ViewBag.NoeParvandeh == "sakhteman")
+                        {
+                            <li class="breadcrumb-item pointer">
+                                <form method="post" asp-area="Parvandeh" asp-controller="Sakhteman" asp-action="Index" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="strShoP" value="@ViewBag.shop" />
+                                    <input type="hidden" name="shod" value="@ViewBag.shod" />
+                                    <input type="hidden" name="dShop" value="@ViewBag.dShop" />
+                                    <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhale" />
+                                    <button type="submit" class="btn btn-link p-0 m-0 text-decoration-none text-primary">اطلاعات بازدید ساختمان</button>
+                                </form>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">کاربری ساختمان</li>
+                        }
+                        else if (ViewBag.NoeParvandeh == "aparteman")
+                        {
+                            <li class="breadcrumb-item pointer">
+                                <form method="post" asp-area="Parvandeh" asp-controller="Apartman" asp-action="Index" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="strShoP" value="@ViewBag.shop" />
+                                    <input type="hidden" name="shod" value="@ViewBag.shod" />
+                                    <input type="hidden" name="dShop" value="@ViewBag.dShop" />
+                                    <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhale" />
+                                    <button type="submit" class="btn btn-link p-0 m-0 text-decoration-none text-primary">اطلاعات بازدید آپارتمان</button>
+                                </form>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">کاربری آپارتمان</li>
+                        }
+
+                    </ol>
+                </nav>
+            }
+            if (ViewBag.shod <= 0)
+            {
+                @if (ViewBag.NoeParvandeh == "sakhteman")
+                {
+                    <p class="fw-semibold fs-18 mb-0">اطلاعات ساختمان</p>
+                }
+                else if (ViewBag.NoeParvandeh == "aparteman")
+                {
+                    <p class="fw-semibold fs-18 mb-0">اطلاعات آپارتمان</p>
+                }
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item pointer">
+                            <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                        </li>
+                        <li class="breadcrumb-item pointer">
+                            <form method="post" asp-controller="ParvandehInfo" asp-action="Index" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="shop" value="@ViewBag.shop" />
+                                <button type="submit" class="btn btn-link p-0 m-0 text-decoration-none text-primary">اطلاعات پرونده</button>
+                            </form>
+                        </li>
+                        @if (ViewBag.NoeParvandeh == "sakhteman")
+                        {
+                            <li class="breadcrumb-item pointer">
+                                <form method="post" asp-area="Parvandeh" asp-controller="Sakhteman" asp-action="Index" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="strShoP" value="@ViewBag.shop" />
+                                    <button type="submit" class="btn btn-link p-0 m-0 text-decoration-none text-primary">اطلاعات ساختمان</button>
+                                </form>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">کاربری ساختمان</li>
+                        }
+                        else if (ViewBag.NoeParvandeh == "aparteman")
+                        {
+                            <li class="breadcrumb-item pointer">
+                                <form method="post" asp-area="Parvandeh" asp-controller="Apartman" asp-action="Index" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="strShoP" value="@ViewBag.shop" />
+                                    <button type="submit" class="btn btn-link p-0 m-0 text-decoration-none text-primary">اطلاعات آپارتمان</button>
+                                </form>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">کاربری آپارتمان</li>
+                        }
+                    </ol>
+                </nav>
+            }
+        }
+        else
+        {
+            <p class="fw-semibold fs-18 mb-0">مرحله @ViewBag.name</p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item pointer">
+                        <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                    </li>
+                    <li class="breadcrumb-item pointer">
+                        <form method="post" asp-area="Marahel" asp-controller="@ViewBag.controller" asp-action="Index" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="shop" value="@ViewBag.shop" />
+                            <input type="hidden" name="shod" value="@ViewBag.shod" />
+                            <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhale" />
+                            <button type="submit" class="btn btn-link p-0 m-0 text-decoration-none text-primary">
+                                مرحله @ViewBag.name
+                            </button>
+                        </form>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">کاربری @ViewBag.name</li>
+                </ol>
+            </nav>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+
+        <div class="card custom-card">
+            <div class="card-header">
+                @{
+                    var CreateKarbari = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Karbari_Create");
+
+                    if (CreateKarbari)
+                    {
+                        <button class="btn btn-sm btn-success" id="CreateKarbari"> ایجاد کاربری جدید </button>
+                    }
+                }
+
+                <input type="hidden" value="@ViewBag.shop" id="KarbariShop" />
+                <input type="hidden" value="@ViewBag.radif" id="KarbariRadif" />
+                <input type="hidden" value="@ViewBag.NoeParvandeh" id="KarbariNoeParvandeh" />
+                <input type="hidden" value="@ViewBag.codeMarhale" id="KarbariCodeMarhale" />
+                <input type="hidden" value="@ViewBag.message" id="KarbariMessage" />
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <table class="table text-nowrap table-bordered table-hover AmardDataTable">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="gridjs-th-fixed">طبقه</th>
+                                <th scope="col" class="gridjs-th-fixed">کاربری</th>
+                                <th scope="col" class="gridjs-th-fixed">نوع استفاده</th>
+                                <th scope="col" class="gridjs-th-fixed">مساحت کاربری</th>
+                                <th scope="col" class="gridjs-th-fixed">تاریخ احداث</th>
+                                <th scope="col" class="gridjs-th-fixed">عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody class="hover">
+                            @foreach (var item in Model)
+                            {
+                                <tr class="text-center">
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">@item.tabagheh</td>
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">@item.karbari</td>
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">@item.noeestefadeh</td>
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">@item.masahat_k</td>
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">@item.tarikhehdas</td>
+                                    <td class="@(item.IsValid ? "valid" : "not_valid")">
+                                        <div class="hstack gap-2 flex-wrap">
+                                            @{
+                                                var EditKarbari = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Karbari_Edit");
+
+                                                if (EditKarbari)
+                                                {
+                                                    <a class="text-warning fs-20 lh-1 pointer KarbariEditRow" id="Karbari-@item.Identity" data-identity="@item.Identity">
+                                                        <i class="ri-edit-box-fill"></i>
+                                                    </a>
+                                                }
+
+
+                                                var DeleteKarbari = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Karbari_Delete");
+
+                                                if (DeleteKarbari)
+                                                {
+                                                    <form method="post" asp-controller="Dv_karbari" asp-action="DeleteKarbari" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@item.Identity" />
+                                                        <input type="hidden" name="shop" value="@item.shop" />
+                                                        <input type="hidden" name="shod" value="@ViewBag.shod" />
+                                                        <input type="hidden" name="NoeParvandeh" value="@item.mtable_name" />
+                                                        <input type="hidden" name="dShop" value="@ViewBag.dShop" />
+                                                        <input type="hidden" name="codeMarhale" value="@ViewBag.codeMarhale" />
+                                                        <button type="submit" class="text-danger fs-20 lh-1 pointer btn btn-link p-0 m-0">
+                                                            <i class="ri-delete-bin-6-fill"></i>
+                                                        </button>
+                                                    </form>
+
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert"> موردی برای نمایش وجود ندارد! </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+
+    <link href="~/theme/assets/libs/datatable/datatables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/theme/assets/libs/datatable/responsive.bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Theme/assets/libs/datatable/jquery.datatables.min.js"></script>
+    <script src="~/Theme/assets/libs/datatable/datatables.bootstrap5.min.js"></script>
+    <script src="~/Theme/assets/libs/datatable/datatables.responsive.min.js"></script>
+
+    <link href="~/lib/persiandatepicker/persian-datepicker.css" rel="stylesheet" />
+
+    <script src="~/lib/persiandatepicker/persian-date.js"></script>
+    <script src="~/lib/persiandatepicker/persian-datepicker.js"></script>
+
+    <script src="~/js/tools/datepeaker.js"></script>
+
+    <script src="~/js/areas/parvandeh/Karbari/Karbari.js"></script>
+}

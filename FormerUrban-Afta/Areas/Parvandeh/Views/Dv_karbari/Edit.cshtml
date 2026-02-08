@@ -1,0 +1,77 @@
+﻿@model Dv_karbariDTO
+
+<div class="modal-header">
+    <h6 class="modal-title" id="ParvandehCrateTitle">کاربری ها</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body h-300 overflow-scroll">
+    <form autocomplete="off">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Identity"/>
+        <input type="hidden" asp-for="shop"/>
+        <input type="hidden" asp-for="d_radif"/>
+        <input type="hidden" asp-for="id"/>
+        <input type="hidden" asp-for="mtable_name"/>
+        <input type="hidden" asp-for="CodeMarhale"/>
+
+        <div class="row">
+            <div class="col-6">
+                <label class="form-label" asp-for="tabagheh">طبقه</label>
+                <select class="form-select form-select-sm" asp-for="c_tabagheh" asp-items='@(new SelectList(Model.ItemTabagheh, "Index", "DisplayName"))'>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="karbari">کاربری</label>
+                <select class="form-select form-select-sm" asp-for="c_karbari" asp-items='@(new SelectList(Model.ItemKarbari, "Index", "DisplayName"))'>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label" asp-for="noeestefadeh">نوع استفاده</label>
+                <select class="form-select form-select-sm" asp-for="c_noeestefadeh" asp-items='@(new SelectList(Model.ItemNoeestefadeh, "Index", "DisplayName"))'>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="noesakhteman">نوع ساختمان</label>
+                <select class="form-select form-select-sm" asp-for="c_noesakhteman" asp-items='@(new SelectList(Model.ItemNoesakhteman, "Index", "DisplayName"))'>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-6">
+                <label class="form-label" asp-for="noesazeh">نوع سازه</label>
+                <select class="form-select form-select-sm" asp-for="c_noesazeh" asp-items='@(new SelectList(Model.ItemNoesazeh, "Index", "DisplayName"))'>
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="marhaleh">مرحله</label>
+                <select class="form-select form-select-sm" asp-for="c_marhaleh" asp-items='@(new SelectList(Model.ItemMarhaleh, "Index", "DisplayName"))'>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="form-group col-6">
+                <label class="form-label">تاریخ احداث</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm flatpickr-input AmardDate" readonly="readonly" asp-for="tarikhehdas">
+                    <button type="button" class="input-group-text AmardDateBtn">
+                        <i class="fs-10 ri-calendar-line"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="masahat_k">مساحت کاربری</label>
+                <input class="form-control form-control-sm" asp-for="masahat_k" />
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="AddOrUpdateKarbari">
+        ذخیره
+    </button>
+</div>

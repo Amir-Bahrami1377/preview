@@ -1,0 +1,83 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model IReadOnlyList<UserDto>
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+
+    <div>
+        <p class="fw-semibold fs-18 mb-0">سیستم کاربران</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">دسترسی کاربران</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<input type="hidden" id="SelectedUserName"/>
+<div class="row">
+    <div class="col-6">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="row col-12">
+                    <div class="col-6">
+                        <input class="form-control form-control-sm form-la" id="UserNameSearch" placeholder="جستجو در کاربران" autocomplete="off"/>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered text-nowrap table-hover " id="UserTable">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>نام کاربری</th>
+                        <th> نام و نام خانوادگی </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr class="text-center UserRow pointer" id="@user.UserName">
+                                <th class="@(user.IsValid ? "valid" : "not_valid")"> @user.UserName </th>
+                                <th class="@(user.IsValid ? "valid" : "not_valid")"> @user.Name @user.Family </th>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6" id="">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="row col-12">
+                    <div class="col-6">
+                        <input class="form-control form-control-sm form-la" id="TypePermissionSearch" placeholder="جستجو در نوع دسترسی" autocomplete="off" />
+
+                    </div>
+                    <div class="col-6 d-flex align-items-end gap-2">
+                        @{
+                            var EditPermission = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "UserPermission_Edit");
+                            if (EditPermission)
+                            {
+                                <button class="btn btn-sm btn-success" id="SaveUserPermission">ذخیره اطلاعات</button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="GetAllPermission">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <script src="~/js/areas/identityuser/userpermission.js"></script>
+}

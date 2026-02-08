@@ -1,0 +1,115 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Darkhast.DarkhastDTO
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">ثبت درخواست</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item pointer">
+                    <form method="post" asp-area="Parvandeh" asp-controller="ParvandehInfo" asp-action="SearchParvandeh" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="code" value="1" />
+                        <input type="hidden" name="value" value="@Model.shop" />
+                        <button type="submit" class="breadcrumb-link btn btn-link p-0 m-0 text-decoration-none text-primary">جستجوی پرونده</button>
+                    </form>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">ثبت درخواست</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title">ثبت درخواست</div>
+            </div>
+            <div class="card-body">
+                <input type="hidden" id="Message" value='@(Model.message != null ? Json.Serialize(Model.message) : "[]")' />
+                <form method="POST" asp-area="Darkhast" asp-controller="SabtDarkhast" asp-action="AddDarkhast"
+                      id="SabtDarkhastForm" autocomplete="off">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="shodarkhast">شماره درخواست</label>
+                            <input class="form-control form-control-sm" asp-for="shodarkhast" readonly="readonly"/>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="shop">شماره پرونده</label>
+                            <input class="form-control form-control-sm" asp-for="shop" readonly="readonly"/>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="c_nosazi">کد نوسازی</label>
+                            <input class="form-control form-control-sm" asp-for="c_nosazi" readonly="readonly"/>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label asp-for="noedarkhast" class="form-label">نوع متقاضی</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_noemot"/>
+                                <input type="text" class="form-control form-control-sm " asp-for="noemot" readonly="readonly">
+                                <button type="button" class="input-group-text" id="NoeMotBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="noedarkhast" class="form-label">نوع درخواست</label>
+                            <select class="form-select form-select-sm" asp-for="c_noedarkhast"
+                                    asp-items="@(new SelectList(Model.EnumDarkhast, "Index", "DisplayName"))"></select>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="moteghazi">نام متقاضی</label>
+                            <input class="form-control form-control-sm" asp-for="moteghazi"/>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="CodeMeli">کدملی</label>
+                            <input class="form-control form-control-sm" asp-for="CodeMeli"/>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="tel">شماره تلفن</label>
+                            <input class="form-control form-control-sm" asp-for="tel"/>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="mob">شماره همراه</label>
+                            <input class="form-control form-control-sm" asp-for="mob"/>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="codeposti">کد پستی</label>
+                            <input class="form-control form-control-sm" asp-for="codeposti"/>
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="email">ایمیل</label>
+                            <input class="form-control form-control-sm" asp-for="email"/>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <label class="form-label" asp-for="address">آدرس</label>
+                            <input class="form-control form-control-sm" asp-for="address"/>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mt-3 col-12">
+                        <button type="submit" class="btn btn-sm btn-success">ثبت درخواست</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/areas/darkhast/sabtedarkhast.js"></script>
+    <script src="~/js/tools/parametric.js"></script>
+}

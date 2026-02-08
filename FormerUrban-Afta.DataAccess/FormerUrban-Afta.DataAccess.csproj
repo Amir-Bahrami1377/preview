@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>FormerUrban_Afta.DataAccess</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="obj\**" />
+		<EmbeddedResource Remove="obj\**" />
+		<None Remove="obj\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="appsettings.Development.json">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+		<Content Include="appsettings.json">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="16.0.0" />
+		<PackageReference Include="DNTPersianUtils.Core" Version="6.9.0" />
+		<PackageReference Include="FluentValidation" Version="12.1.1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+		<!--<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />-->
+		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.3.9" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="System.Drawing.Common" Version="10.0.2" />
+		<PackageReference Include="System.ServiceModel.Duplex" Version="6.0.*" />
+		<PackageReference Include="System.ServiceModel.Federation" Version="10.0.652802" />
+		<PackageReference Include="System.ServiceModel.Http" Version="10.0.652802" />
+		<PackageReference Include="System.ServiceModel.NetTcp" Version="10.0.652802" />
+		<PackageReference Include="System.ServiceModel.Security" Version="6.0.*" />
+		<PackageReference Include="UAParser" Version="3.1.47" />
+		<PackageReference Include="zxcvbn-core" Version="7.0.92" />
+	</ItemGroup>
+
+</Project>

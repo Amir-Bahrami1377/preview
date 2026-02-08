@@ -1,0 +1,47 @@
+﻿@model List<FormerUrban_Afta.DataAccess.DTOs.Sabetha.SabethaDto>
+
+<div class="modal-header">
+    <h6 class="modal-title">پارامتریک</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <input type="hidden" value="@ViewBag.CodeId" id="ParametricCodeId" />
+    <input type="hidden" value="@ViewBag.TitleId" id="ParametricTitleId" />
+    @if (Model.Any())
+    {
+        <div class="row">
+            <input type="text" id="ParametricSearch" placeholder="جستجو در جدول پارامتریک" class="form-control form-control-sm" autocomplete="off" />
+        </div>
+        <div class="row mt-2 overflow-scroll h-300">
+            <table id="ParametricTable" class="table text-nowrap table-bordered table-hover">
+                <thead>
+                    <tr>
+                        @* <th scope="col" class="gridjs-th-fixed">کد</th> *@
+                        <th scope="col" class="gridjs-th-fixed">شرح</th>
+                    </tr>
+                </thead>
+                <tbody class="hover">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="text-start ParametricRow">
+                            <td class="d-none">@item.Index</td>
+                            <td>@item.DisplayName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert"> موردی برای نمایش وجود ندارد! </div>
+    }
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    @* <button type="button" class="btn btn-sm btn-success" id="ParametricSelected">
+        انتخاب
+    </button> *@
+</div>

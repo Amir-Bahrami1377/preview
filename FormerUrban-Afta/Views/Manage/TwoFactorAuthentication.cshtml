@@ -1,0 +1,45 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Login.TwoFactorAuthenticationDto
+@{
+    ViewData["Title"] = "Two-Factor Authentication";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (!Model.HasAuthenticator)
+{
+    <div class="alert alert-warning">
+        You don't have an authenticator app configured.
+    </div>
+    <a class="btn btn-primary" asp-action="EnableAuthenticator">Add Authenticator App</a>
+}
+else
+{
+    <div>
+        <p><strong>Authenticator App Configured:</strong> Yes</p>
+        <p><strong>Two-Factor Enabled:</strong> @(Model.Is2faEnabled ? "Yes" : "No")</p>
+        <p><strong>Recovery Codes Left:</strong> @Model.RecoveryCodesLeft</p>
+
+        <form asp-action="ForgetTwoFactorClient" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-warning">Forget This Browser</button>
+        </form>
+
+        @if (Model.Is2faEnabled)
+        {
+            <form asp-action="GenerateRecoveryCodes" method="post" class="mt-2">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-secondary">Generate New Recovery Codes</button>
+            </form>
+
+            <form asp-action="Disable2fa" method="post" class="mt-2">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">Disable 2FA</button>
+            </form>
+
+            <form asp-action="ResetAuthenticator" method="post" class="mt-2">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">Reset Authenticator App</button>
+            </form>
+        }
+    </div>
+}

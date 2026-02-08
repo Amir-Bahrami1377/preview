@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_ErrorLayout";
+}
+
+<p class="error-text mb-sm-0 mb-2">403</p>
+<p class="fs-18 fw-semibold mb-3">شما اجازه دسترسی به این صفحه را ندارید!</p>
+<div class="row justify-content-center mb-5">
+    <div class="col-xl-6">
+        <p class="mb-0 op-7">
+            1. سطح دسترسی شما برای این عملیات کافی نیست.
+            <br />
+            2. در صورت نیاز، با مدیر سیستم تماس بگیرید. <br /> @(ViewBag.actionId != "" ? $"کد خطا : {ViewBag.actionId}" : "")
+        </p>
+    </div>
+</div>
+<a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-primary">
+    بازگشت به نرم‌افزار
+    <i class="ri-arrow-left-line align-middle ms-1 d-inline-block"></i>
+</a>

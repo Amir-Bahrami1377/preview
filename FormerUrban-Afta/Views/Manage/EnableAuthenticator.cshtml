@@ -1,0 +1,36 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Login.EnableAuthenticatorDto
+
+<div class="modal-header">
+    <h6 class="modal-title">فعال سازی تایید دو مرحله ای</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <p class="text-center alert alert-info">
+            <strong>کد : </strong> @Model.SharedKey
+        </p>
+        <p class="text-center alert alert-danger">
+            کد QR را با برنامه <strong>Google Authenticator</strong> اسکن کنید.
+        </p>
+        <div class="text-center">
+            <img src="data:image/png;base64,@Convert.ToBase64String(Model.QrCodeImage)" alt="QR Code" class="img-thumbnail"/>
+        </div>
+        <form autocomplete="off" method="post" class="mt-3 d-flex justify-content-center">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="UserName"/>
+            <input asp-for="Code" class="form-control form-control-sm w-auto no-spinner" autocomplete="off" placeholder="کد تأیید" value=""/>
+        </form>
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success"  id="EnableAuthenticatorSubmit">
+        فعالسازی
+    </button>
+</div>

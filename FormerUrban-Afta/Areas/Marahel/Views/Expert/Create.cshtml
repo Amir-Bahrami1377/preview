@@ -1,0 +1,44 @@
+﻿@model ExpertDto
+
+<div class="modal-header">
+    <h6 class="modal-title" id="ParvandehCrateTitle">تعریف مأمور بازدید</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body h-300 overflow-scroll">
+    <form autocomplete="off">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Identity"/>
+        <input type="hidden" asp-for="RequestNumber"/>
+
+        <div class="row">
+            <div class="col-6">
+                <label class="form-label" asp-for="Name">نام</label>
+                <input class="form-control form-control-sm" asp-for="Name"/>
+            </div>
+            <div class="col-6">
+                <label class="form-label" asp-for="Family">نام خانوادگی</label>
+                <input class="form-control form-control-sm" asp-for="Family"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="form-group col-6">
+                <label asp-for="DateVisit" class="form-label">تاریخ بازدید</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm flatpickr-input AmardDate" asp-for="DateVisit" readonly="readonly">
+                    <button type="button" class="input-group-text ExpertInfoReadOnly AmardDateBtn">
+                        <i class="ri-calendar-line"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="AddOrUpdateExpert">
+        ذخیره
+    </button>
+</div>

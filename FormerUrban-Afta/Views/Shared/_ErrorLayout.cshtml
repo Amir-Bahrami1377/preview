@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="rtl">
+@{
+    Layout = "";
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csp-nonce" content="@Context.Items["CSP-Nonce"]">
+
+    <title>نرم افزار شهرسازی آمارد</title>
+
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/Theme/assets/css/styles.min.css" rel="stylesheet">
+    <link href="~/Theme/assets/css/icons.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="page error-bg" id="particles-js">
+        <div class="error-page">
+            <div class="container">
+                <div class="text-center p-5 my-auto">
+                    <div class="row align-items-center justify-content-center h-100">
+                        <div class="col-xl-7">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/Theme/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        
+</body>
+
+</html>

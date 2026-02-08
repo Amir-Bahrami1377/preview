@@ -1,0 +1,160 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model ParvanehDto
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">مرحله صدور پروانه</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">مرحله صدور پروانه</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="btn-list mt-md-0 mt-2">
+        @{
+            var ParvanehKarbari = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_Karbari");
+            var taeedErsal = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "TaeedErsal");
+
+            if (ParvanehKarbari)
+            {
+                <form method="post" asp-area="Parvandeh" asp-controller="Dv_karbari" asp-action="Index" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="shop" value="@Model.shop" />
+                    <input type="hidden" name="shod" value="@Model.sh_darkhast" />
+                    <input type="hidden" name="dShop" value="@Model.shop" />
+                    <input type="hidden" name="codeMarhale" value="@Model.codeMarhaleh" />
+                    <button type="submit" class="btn btn-sm btn-primary btn-wave waves-effect waves-light">کاربری های صدور پروانه</button>
+                </form>
+            }
+            if (taeedErsal)
+            {
+                <a class="btn btn-sm btn-success btn-wave waves-effect waves-light" id="TaeedErsal">تأیید و ارسال</a>
+            }
+        }
+    </div>
+</div>
+
+<input type="hidden" id="messages" value='@(Model.message != null ? Json.Serialize(Model.message) : "[]")' />
+
+<div class="row">
+    <div class="col-12">
+        @await Component.InvokeAsync("DarkhastDetail", new { shod = Model.sh_darkhast })
+    </div>
+    <div class="col-12">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title">مشخصات پروانه
+                    @if (!Model.IsValid)
+                    {
+                        <small class="text-danger"> ( داده های غیرمجاز ) </small>
+                    }
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-area="Marahel" asp-controller="Parvaneh" asp-action="Update" method="post" autocomplete="off" class="w-100" id="ParvanehForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Identity" />
+                    <input type="hidden" asp-for="shop" />
+                    <input type="hidden" asp-for="sh_darkhast" id="shod" />
+                    <input type="hidden" asp-for="codeMarhaleh" />
+
+                    <div class="row">
+                        <div class="col-3">
+                            <label asp-for="noe_parvaneh" class="form-label">نوع پروانه</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_noeParvaneh" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="noe_parvaneh" readonly="readonly">
+                                <button type="button" class="input-group-text ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="noe_parvanehBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="form-group col-3">
+                            <label asp-for="tarikh_parvaneh" class="form-label">تاریخ پروانه</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm flatpickr-input AmardDate ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tarikh_parvaneh" readonly="readonly">
+                                <button type="button" class="input-group-text ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")">
+                                    <i class="ri-calendar-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group col-3">
+                            <label asp-for="tarikh_end_amaliat_s" class="form-label">تاریخ اتمام عملیات ساختمانی</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm flatpickr-input AmardDate ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tarikh_end_amaliat_s" readonly="readonly">
+                                <button type="button" class="input-group-text ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")">
+                                    <i class="ri-calendar-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group col-3">
+                            <label asp-for="tarikh_e_bimeh" class="form-label">تاریخ اعتبار بیمه نامه</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm flatpickr-input AmardDate ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tarikh_e_bimeh" readonly="readonly">
+                                <button type="button" class="input-group-text ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")">
+                                    <i class="ri-calendar-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="sho_parvaneh">شماره پروانه</label>
+                            <input class="form-control form-control-sm ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="sho_parvaneh" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="sho_bimenameh">شماره بیمه نامه کارگران</label>
+                            <input class="form-control form-control-sm ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="sho_bimenameh" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="masahat_m_esh_zamin">مساحت زمین</label>
+                            <input class="form-control form-control-sm ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_m_esh_zamin" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="masahat_m_s_tarakom">مساحت تراکم</label>
+                            <input class="form-control form-control-sm ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_m_s_tarakom" />
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <label class="form-label" asp-for="tozihat_parvaneh">توضیحات</label>
+                            <input class="form-control form-control-sm ParvanehReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tozihat_parvaneh" />
+                        </div>
+                    </div>
+                    @{
+                        var ParvanehEdit = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvaneh_Edit");
+
+                        if (ParvanehEdit)
+                        {
+                            <div class="d-flex align-items-center justify-content-center mt-3 col-12">
+                                <a class="btn btn-sm btn-warning mx-1" id="Edit">ویرایش اطلاعات</a>
+                                <a class="btn btn-sm btn-danger mx-1" id="Cancel">انصراف</a>
+                                <button type="submit" class="btn btn-sm btn-success mx-1" id="Submit">ذخیره اطلاعات</button>
+                            </div>
+                        }
+                    }
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <link href="~/lib/persiandatepicker/persian-datepicker.css" rel="stylesheet" />
+
+    <script src="~/lib/persiandatepicker/persian-date.js"></script>
+    <script src="~/lib/persiandatepicker/persian-datepicker.js"></script>
+
+    <script src="~/js/tools/datepeaker.js"></script>
+
+    <script src="~/js/tools/parametric.js"></script>
+
+    <script src="~/js/areas/marahel/parvaneh/parvaneh.js"></script>
+    <script src="~/js/areas/marahel/taeedersal/taeedersal.js"></script>
+}

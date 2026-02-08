@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="rtl">
+@{
+    var @simonwep = "@simonwep";
+    var @popperjs = "@popperjs";
+    Layout = "";
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csp-nonce" content="@Context.Items["CSP-Nonce"]">
+
+    <title>نرم افزار شهرسازی آمارد</title>
+
+    <link href="~/lib/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/Theme/assets/css/styles.min.css" rel="stylesheet">
+    <link href="~/Theme/assets/css/icons.css" rel="stylesheet">
+</head>
+
+<body>
+    
+    <div class="page error-bg" id="particles-js">
+        
+        <div class="error-page">
+            <div class="container">
+                <div class="text-center p-5 my-auto">
+                    <div class="row align-items-center justify-content-center h-100">
+                        <div class="col-xl-7">
+                            <p class="error-text mb-sm-0 mb-2">404</p>
+                            <p class="fs-18 fw-semibold mb-3"> صفحه مورد نظر یافت نشد! </p>
+                            <div class="row justify-content-center mb-5">
+                                <div class="col-xl-6">
+                                    <p class="mb-0 op-7">
+                                        1. عدم دسترسی به صفحه مورد نظر!
+                                        <br/>
+                                        2. لینک موردنظر به درستی وارد نشده!
+                                        <br/>
+                                        3. مشکلی در سرور اتصال به وجود آمده است!
+                                    </p>
+                                </div>
+                            </div> <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                                بازگشت به نرم افزار
+                                <i class="ri-arrow-left-line align-middle ms-1 d-inline-block"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    
+    <script src="~/Theme/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

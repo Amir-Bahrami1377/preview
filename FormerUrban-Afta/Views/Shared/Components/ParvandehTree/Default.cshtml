@@ -1,0 +1,137 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model List<FormerUrban_Afta.DataAccess.DTOs.Parvandeh.TreeViewDTO>
+
+@{
+    var Melk = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_MelkDetail");
+    var Sakhteman = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_SakhtemanDetail");
+    var Aparteman = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_ApartemanDetail");
+}
+
+<div class="card custom-card">
+    <div class="card-header justify-content-between">
+        <div class="card-title">پرونده ها</div>
+    </div>
+
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="list-group">
+                @foreach (var item in Model)
+                {
+                    var hasActiveChild = item.Items != null && item.Items.Any(child => child.Selected ||
+                    (child.Items != null && child.Items.Any(grandChild => grandChild.Selected)));
+
+                    <div class="list-group-item list-group-item-action d-flex align-items-center justify-content-between ParvandehTreeView @(item.IsValid ? "valid" : "not_valid") "
+                         id="@item.Id" data-idparent="@item.IdParent" data-shop="@item.Id" data-coden="@item.Text">
+                        <span>
+                            <i class="bx @item.Type fs-18 me-2 op-7"></i>
+                            @item.Text
+                            <span>@item.Name</span>
+                        </span>
+                        <span class="d-flex">
+                            @if (Melk)
+                            {
+                                <form method="post" asp-area="Parvandeh" asp-controller="Melk" asp-action="PropertyDetails" class="ShowParvandehDetail">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="shop" value="@item.Id" />
+                                    <input type="hidden" name="shod" value="@ViewBag.shod" />
+                                    <input type="hidden" name="dShop" value="@ViewBag.shop" />
+                                    <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhaleh" />
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        اطلاعات@(ViewBag.shod > 0 ? " بازدید " : " ")ملک
+                                    </button>
+                                </form>
+
+                            }
+
+                            @if (item.Items != null && item.Items.Any())
+                            {
+                                <button class="btn btn-sm btn-info" data-bs-toggle="collapse" data-bs-target="#Parvandeh_@item.Id">+</button>
+                            }
+                        </span>
+                    </div>
+
+                    @if (item.Items != null && item.Items.Any())
+                    {
+                        <div class="collapse pe-5 @(hasActiveChild ? "show" : "")" id="Parvandeh_@item.Id">
+                            @foreach (var child in item.Items)
+                            {
+                                var hasActiveChild2 = child.Items != null && child.Items.Any(child => child.Selected);
+
+                                <div class="list-group-item list-group-item-action d-flex align-items-center justify-content-between @(child.IsValid ? "valid" : "not_valid") ParvandehTreeView"
+                                     id="@child.Id" data-idparent="@child.IdParent" data-shop="@child.Id" data-coden="@child.Text">
+                                    <span>
+                                        <i class="bx @child.Type fs-18 me-2 op-7"></i>
+                                        @child.Text
+                                        <span>@child.Name</span>
+                                    </span>
+                                    <span class="d-flex">
+                                        @if (Sakhteman)
+                                        {
+                                            <form method="post" asp-area="Parvandeh" asp-controller="Sakhteman" asp-action="Index" class="ShowParvandehDetail">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="strShoP" value="@child.Id" />
+                                                <input type="hidden" name="shod" value="@ViewBag.shod" />
+                                                <input type="hidden" name="dShop" value="@ViewBag.shop" />
+                                                <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhaleh" />
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    اطلاعات@(ViewBag.shod > 0 ? " بازدید " : " ")ساختمان
+                                                </button>
+                                            </form>
+
+                                        }
+
+                                        @if (child.Items != null && child.Items.Any())
+                                        {
+                                            <button class="btn btn-sm btn-info" data-bs-toggle="collapse" data-bs-target="#ParvandehـChild_@child.Id">+</button>
+                                        }
+                                    </span>
+                                </div>
+                                @if (child.Items != null && child.Items.Any())
+                                {
+                                    <div class="collapse pe-5 @(hasActiveChild2 ? "show" : "")" id="ParvandehـChild_@child.Id">
+                                        @foreach (var child2 in child.Items)
+                                        {
+                                            <div class="list-group-item list-group-item-action d-flex align-items-center justify-content-between ParvandehTreeView @(child2.IsValid ? "valid" : "not_valid")"
+                                                 id="@child2.Id" data-idparent="@child2.IdParent" data-shop="@child2.Id" data-coden="@child2.Text">
+                                                <span>
+                                                    <i class="bx @child2.Type fs-18 me-2 op-7"></i>
+                                                    @child2.Text
+                                                    <span>@child2.Name</span>
+                                                </span>
+                                                <span>
+                                                    @if (Aparteman)
+                                                    {
+                                                        <form method="post" asp-area="Parvandeh" asp-controller="Apartman" asp-action="Index" class="ShowParvandehDetail">
+                                                            @Html.AntiForgeryToken()
+                                                            <input type="hidden" name="strShoP" value="@child2.Id" />
+                                                            <input type="hidden" name="shod" value="@ViewBag.shod" />
+                                                            <input type="hidden" name="dShop" value="@ViewBag.shop" />
+                                                            <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhaleh" />
+                                                            <button type="submit" class="btn btn-sm btn-success">
+                                                                اطلاعات@(ViewBag.shod > 0 ? " بازدید " : " ")آپارتمان
+                                                            </button>
+                                                        </form>
+
+                                                    }
+                                                </span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert"> موردی برای نمایش وجود ندارد! </div>
+        }
+
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model FormerUrban_Afta.DataAccess.DTOs.Marahel.MarahelDto
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">مرحله بازدید</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">مرحله بازدید</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="btn-list mt-md-0 mt-2">
+        @{
+            var taeedErsal = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "TaeedErsal");
+            if (taeedErsal)
+            {
+                <a class="btn btn-sm btn-success btn-wave waves-effect waves-light" id="TaeedErsal">تأیید و ارسال</a>
+            }
+        }
+    </div>
+</div>
+<input type="hidden" id="codeMarhaleh" value="@Model.codeMarhaleh"/>
+<input type="hidden" asp-for="shop" />
+<input type="hidden" asp-for="shod" />
+
+
+<div class="row">
+    <div class="col-12">
+        @await Component.InvokeAsync("DarkhastDetail", new { shod = Model.shod })
+    </div>
+    <div class="col-12">
+        @await Component.InvokeAsync("ParvandehTree", new { shop = Model.shop, shod = Model.shod, codeMarhaleh = Model.codeMarhaleh })
+    </div>
+
+</div>
+<div class="row">
+    @{
+        var visitExpert = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Visit_Expert");
+        if (visitExpert)
+        {
+            <div class="col-12" id="ExpertView"></div>
+        }
+    }
+
+</div>
+
+@section Scripts
+{
+    <script src="~/js/areas/marahel/visit/visit.js"></script>
+    <script src="~/js/areas/marahel/Expert/Expert.js"></script>
+    <script src="~/js/areas/marahel/TaeedErsal/TaeedErsal.js"></script>
+    <script src="~/js/tools/treeview.js"></script>
+    
+    <link href="~/lib/persiandatepicker/persian-datepicker.css" rel="stylesheet" />
+
+    <script src="~/lib/persiandatepicker/persian-date.js"></script>
+    <script src="~/lib/persiandatepicker/persian-datepicker.js"></script>
+
+    <script src="~/js/tools/datepeaker.js"></script>
+}

@@ -1,0 +1,28 @@
+﻿@model FormerUrban_Afta.DataAccess.DTOs.Login.EnableAuthenticatorDto
+
+<div class="modal-header">
+    <h6 class="modal-title">غیر فعال سازی تایید دو مرحله ای</h6>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <form autocomplete="off" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="UserName"/>
+            <div class="col-6">
+                <label class="form-label"> کد تایید </label>
+                <input asp-for="Code" class="form-control form-control-sm no-spinner" autocomplete="off" value=""/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">
+        بستن
+    </button>
+    <button type="button" class="btn btn-sm btn-success" id="DisableAuthenticatorSubmit">
+        غیر فعال سازی
+    </button>
+</div>

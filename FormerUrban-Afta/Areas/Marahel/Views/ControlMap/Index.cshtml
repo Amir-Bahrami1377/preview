@@ -1,0 +1,153 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model FormerUrban_Afta.DataAccess.DTOs.Marahel.ControlMapDto
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">مرحله کنترل نقشه</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">مرحله کنترل نقشه</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="btn-list mt-md-0 mt-2">
+        @{
+            var controlMapKarbari = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_Karbari");
+            var taeedErsal = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "TaeedErsal");
+
+            if (controlMapKarbari)
+            {
+                <form method="post" asp-area="Parvandeh" asp-controller="Dv_karbari" asp-action="Index" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="shop" value="@Model.shop" />
+                    <input type="hidden" name="shod" value="@Model.sh_Darkhast" />
+                    <input type="hidden" name="dShop" value="@Model.shop" />
+                    <input type="hidden" name="codeMarhale" value="@Model.codeMarhaleh" />
+                    <button type="submit" class="btn btn-sm btn-primary btn-wave waves-effect waves-light">کاربری های کنترل نقشه</button>
+                </form>
+            }
+            if (taeedErsal)
+            {
+                <a class="btn btn-sm btn-success btn-wave waves-effect waves-light" id="TaeedErsal">تأیید و ارسال</a>
+            }
+        }
+    </div>
+</div>
+
+<input type="hidden" id="messages" value='@(Model.message != null ? Json.Serialize(Model.message) : "[]")' />
+
+<div class="row">
+    <div class="col-12">
+        @await Component.InvokeAsync("DarkhastDetail", new { shod = Model.sh_Darkhast })
+    </div>
+    <div class="col-12">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title">
+                    مشخصات کنترل نقشه
+                    @if (!Model.IsValid)
+                    {
+                        <small class="text-danger"> ( داده های غیرمجاز ) </small>
+                    }
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post" asp-area="Marahel" asp-controller="ControlMap" asp-action="Update" autocomplete="off" id="ControlMapForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Identity" />
+                    <input type="hidden" asp-for="codeMarhaleh" />
+                    <input type="hidden" asp-for="shop" />
+                    <input type="hidden" asp-for="sh_Darkhast" />
+                    <input type="hidden" asp-for="sh_Darkhast" id="shod" />
+                    <div class="row">
+                        <div class="col-3">
+                            <label asp-for="NoeNama" class="form-label">نوع نما</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="C_NoeNama" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="NoeNama" readonly="readonly">
+                                <button type="button" class="input-group-text ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="NoenamaBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="noesaghf" class="form-label">نوع سقف</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_noesaghf" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="noesaghf" readonly="readonly">
+                                <button type="button" class="input-group-text ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="NoesaghfBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="NoeSaze" class="form-label">نوع سازه</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_NoeSaze" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="NoeSaze" readonly="readonly">
+                                <button type="button" class="input-group-text ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="NoeSazeBtn">...</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="masahat_s">مساحت طبق سند</label>
+                            <input class="form-control form-control-sm ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_s" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="masahat_e">مساحت اصلاحی</label>
+                            <input class="form-control form-control-sm ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_e" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="masahat_m">مساحت موجود</label>
+                            <input class="form-control form-control-sm ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_m" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="masahat_b">مساحت باقیمانده</label>
+                            <input class="form-control form-control-sm ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_b" />
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="satheshghal">سطح اشغال</label>
+                            <input class="form-control form-control-sm ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="satheshghal" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="tarakom">تراکم</label>
+                            <input class="form-control form-control-sm ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tarakom" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="TedadTabaghe">تعداد طبقه</label>
+                            <input class="form-control form-control-sm ControlMapReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="TedadTabaghe" />
+                        </div>
+                    </div>
+                    @{
+                        var controlMapEdit = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "ControlMap_Edit");
+                        if (controlMapEdit)
+                        {
+                            <div class="d-flex align-items-center justify-content-center mt-3 col-12">
+                                <a class="btn btn-sm btn-warning mx-1" id="Edit">ویرایش اطلاعات</a>
+                                <a class="btn btn-sm btn-danger mx-1" id="Cancel">انصراف</a>
+                                <button type="submit" class="btn btn-sm btn-success mx-1" id="Submit">ذخیره اطلاعات</button>
+                            </div>
+                        }
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/tools/parametric.js"></script>
+    <script src="~/js/areas/marahel/controlmap/controlmap.js"></script>
+    <script src="~/js/areas/marahel/taeedersal/taeedersal.js"></script>
+}

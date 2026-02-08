@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>aspnet-FormerUrban_Afta-b210e15e-3a4d-40a0-95ee-8904531d25dc</UserSecretsId>
+		<RootNamespace>FormerUrban_Afta</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Extensions\**" />
+		<Compile Remove="Hubs\**" />
+		<Compile Remove="Models\**" />
+		<Content Remove="Extensions\**" />
+		<Content Remove="Hubs\**" />
+		<Content Remove="Models\**" />
+		<EmbeddedResource Remove="Extensions\**" />
+		<EmbeddedResource Remove="Hubs\**" />
+		<EmbeddedResource Remove="Models\**" />
+		<None Remove="Extensions\**" />
+		<None Remove="Hubs\**" />
+		<None Remove="Models\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Meta.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="16.0.0" />
+		<PackageReference Include="IPNetwork2" Version="3.4.853" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.15.0" />
+		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.0" />
+		<PackageReference Include="QRCoder" Version="1.7.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+		<PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+		<PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
+		<PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="10.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Areas\Marahel\Views\ControlMap\" />
+		<Folder Include="Areas\Marahel\Views\Parvaneh\" />
+		<Folder Include="Areas\Marahel\Views\TaeedErsal\" />
+		<Folder Include="wwwroot\js\Areas\Darkhast\" />
+		<Folder Include="wwwroot\Theme\assets\font\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\FormerUrban-Afta.DataAccess\FormerUrban-Afta.DataAccess.csproj" />
+	</ItemGroup>
+
+</Project>

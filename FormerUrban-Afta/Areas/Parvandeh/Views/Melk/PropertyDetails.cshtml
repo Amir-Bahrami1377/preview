@@ -1,0 +1,286 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@model MelkDto
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+
+    <div>
+        @if (Model.Active)
+        {
+            <p class="fw-semibold fs-18 mb-0">اطلاعات ملک</p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item pointer">
+                        <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                    </li>
+                    <li class="breadcrumb-item pointer">
+                        <form method="post" asp-area="Parvandeh" asp-controller="ParvandehInfo" asp-action="Index" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="shop" value="@Model.shop" />
+                            <button type="submit" class="breadcrumb-link btn btn-link p-0 m-0 text-decoration-none text-primary">
+                                اطلاعات پرونده
+                            </button>
+                        </form>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">اطلاعات ملک</li>
+                </ol>
+            </nav>
+        }
+        else
+        {
+            <p class="fw-semibold fs-18 mb-0">اطلاعات بازدید</p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item pointer">
+                        <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                    </li>
+                    <li class="breadcrumb-item pointer">
+                        <form method="post" asp-area="Marahel" asp-controller="Visit" asp-action="Index" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="shop" value="@ViewBag.dShop" />
+                            <input type="hidden" name="shod" value="@Model.sh_Darkhast" />
+                            <input type="hidden" name="codeMarhaleh" value="@Model.codeMarhaleh" />
+                            <button type="submit" class="breadcrumb-link btn btn-link p-0 m-0 text-decoration-none text-primary">
+                                مرحله بازدید
+                            </button>
+                        </form>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">اطلاعات بازدید ملک</li>
+                </ol>
+            </nav>
+        }
+    </div>
+    <div class="btn-list mt-md-0 mt-2">
+        @{
+            var Savabegh = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_Savabegh");
+            var Malekin = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_Malekin");
+
+            if (Savabegh)
+            {
+                <form method="post" asp-area="Parvandeh" asp-controller="Savabegh" asp-action="Index" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="shop" value="@Model.shop" />
+                    <input type="hidden" name="NoeParvandeh" value="melk" />
+                    <input type="hidden" name="shod" value="@Model.sh_Darkhast" />
+                    <input type="hidden" name="dShop" value="@ViewBag.dShop" />
+                    <input type="hidden" name="dShop" value="@ViewBag.dShop" />
+                    <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhaleh" />
+                    <button type="submit" class="btn btn-sm btn-primary btn-wave waves-effect waves-light">
+                        سوابق ملک
+                    </button>
+                </form>
+
+            }
+
+            if (Malekin)
+            {
+                <form method="post" asp-area="Parvandeh" asp-controller="Malekin" asp-action="Index" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="shop" value="@Model.shop" />
+                    <input type="hidden" name="NoeParvandeh" value="melk" />
+                    <input type="hidden" name="shod" value="@Model.sh_Darkhast" />
+                    <input type="hidden" name="dShop" value="@ViewBag.dShop" />
+                    <input type="hidden" name="codeMarhaleh" value="@ViewBag.codeMarhaleh" />
+                    <button type="submit" class="btn btn-sm btn-primary btn-wave waves-effect waves-light">
+                        مالکین ملک
+                    </button>
+                </form>
+            }
+        }
+    </div>
+</div>
+
+<input type="hidden" value="@Model.shop" id="MelkInfoShop" />
+<input type="hidden" id="PropertyDetailsErrorMessages" value='@(Model.message != null ? Json.Serialize(Model.message) : "[]")' />
+<input type="hidden" id="RequestVerificationToken" value="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
+
+<div class="row">
+    <div class="col-xl-12">
+
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    اطلاعات ملک
+                    @if (!Model.IsValid)
+                    {
+                        <small class="text-danger"> ( داده های غیرمجاز ) </small>
+                    }
+                </div>
+            </div>
+            <div class="card-body d-flex align-items-start">
+                <form asp-controller="Melk" asp-action="UpdateMelk" method="post" id="MelkInfoForm" autocomplete="off" class="w-100">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Identity" />
+                    <input type="hidden" asp-for="shop" />
+                    <input type="hidden" asp-for="radif" />
+                    <input type="hidden" asp-for="sh_Darkhast" />
+                    <input type="hidden" asp-for="Active" />
+                    <input type="hidden" asp-for="codeMarhaleh" />
+                    <input type="hidden" id="dShop" name="dShop" value="@ViewBag.dShop" />
+
+                    <div class="row">
+                        <div class="col-3">
+                            <label asp-for="noesanad" class="form-label">نوع سند </label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_noesanad" id="MelkInfo-c_noesanad" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="noesanad" readonly="readonly" id="MelkInfo-noesanad">
+                                <button type="button" class="input-group-text MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="MelkInfo-noesanadBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="vazsanad" class="form-label">وضعیت سند</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_vazsanad" id="MelkInfo-c_vazsanad" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="vazsanad" readonly="readonly" id="MelkInfo-vazsanad">
+                                <button type="button" class="input-group-text MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="MelkInfo-vazsanadBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="vazmelk" class="form-label">وضعیت ملک</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_vazmelk" id="MelkInfo-c_vazmelk" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="vazmelk" readonly="readonly" id="MelkInfo-vazmelk">
+                                <button type="button" class="input-group-text MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="MelkInfo-vazmelkBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="noemelk" class="form-label">نوع ملک_وضعیت فرسودگی</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_noemelk" id="MelkInfo-c_noemelk" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="noemelk" readonly="readonly" id="MelkInfo-noemelk">
+                                <button type="button" class="input-group-text MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="MelkInfo-noemelkBtn">...</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label asp-for="marhaleh" class="form-label">مرحله ساخت</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_marhaleh" id="MelkInfo-c_marhaleh" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="marhaleh" readonly="readonly" id="MelkInfo-marhaleh">
+                                <button type="button" class="input-group-text MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="MelkInfo-marhalehBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="mahdodeh" class="form-label">محدوده</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_mahdodeh" id="MelkInfo-c_mahdodeh" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="mahdodeh" readonly="readonly" id="MelkInfo-mahdodeh">
+                                <button type="button" class="input-group-text MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="MelkInfo-mahdodehBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="KarbariAsli" class="form-label">کاربری اصلی</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="C_karbariAsli" id="MelkInfo-C_karbariAsli" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="KarbariAsli" readonly="readonly" id="MelkInfo-KarbariAsli">
+                                <button type="button" class="input-group-text MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="MelkInfo-KarbariAsliBtn">...</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div asp-for="pelakabi" class="col-3">
+                            <label class="form-label">پلاک آبی</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="pelakabi" id="MelkInfo-pelakabi" />
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="tel" class="form-label">تلفن ثابت</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tel" id="MelkInfo-tel" />
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="codeposti" class="form-label">کد پستی</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="codeposti" id="MelkInfo-codeposti" />
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="ArzeshArse" class="form-label">ارزش عرصه</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="ArzeshArse" id="MelkInfo-ArzeshArse" />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label asp-for="masahat_s" class="form-label">مساحت طبق سند</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_s" id="MelkInfo-masahat_s" />
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="masahat_m" class="form-label">مساحت وضع موجود</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_m" id="MelkInfo-masahat_m" />
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="masahat_e" class="form-label">مساحت اصلاحی</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_e" id="MelkInfo-masahat_e" />
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="masahat_b" class="form-label">مساحت باقی مانده</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="masahat_b" id="MelkInfo-masahat_b" />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label asp-for="masahat_s" class="form-label">مختصات جغرافیایی (UTMX)</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="utmx" />
+                        </div>
+                        <div class="col-3">
+                            <label asp-for="masahat_s" class="form-label">مختصات جغرافیایی (UTMY)</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="utmy" />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12 d-flex align-items-center justify-content-between">
+                            <label class="form-label mt-4">پلاک ثبتی</label>
+                            <div class="col-2">
+                                <label asp-for="tafkiki" class="form-label">قطعه تفکیکی</label>
+                                <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tafkiki" id="MelkInfo-tafkiki" />
+                            </div>
+                            <div class="col-2">
+                                <label asp-for="fari" class="form-label">فرعی</label>
+                                <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="fari" id="MelkInfo-fari" />
+                            </div>
+                            <div class="col-2">
+                                <label asp-for="azFari" class="form-label">از فرعی</label>
+                                <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="azFari" id="MelkInfo-azFari" />
+                            </div>
+                            <div class="col-2">
+                                <label asp-for="asli" class="form-label">اصلی</label>
+                                <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="asli" id="MelkInfo-asli" />
+                            </div>
+                            <div class="col-2">
+                                <label asp-for="bakhsh" class="form-label">بخش</label>
+                                <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="bakhsh" id="MelkInfo-bakhsh" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <label asp-for="address" class="form-label">آدرس</label>
+                            <input class="form-control form-control-sm MelkInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="address" id="MelkInfo-address" />
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-center mt-3 col-12">
+                        @{
+                            var EditMelk = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Melk_Edit");
+
+                            if (EditMelk)
+                            {
+                                <a class="btn btn-sm btn-warning mx-1" id="MelkInfoEdit">ویرایش اطلاعات</a>
+                                <a class="btn btn-sm btn-danger mx-1" id="MelkInfoCancel">انصراف</a>
+                                <button type="submit" class="btn btn-sm btn-success mx-1" id="MelkInfoSubmit">ذخیره اطلاعات</button>
+                            }
+                        }
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/parvandeh/melk/propertydetails.js"></script>
+    <script src="~/js/tools/parametric.js"></script>
+}

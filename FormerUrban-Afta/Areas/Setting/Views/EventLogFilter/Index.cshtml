@@ -1,0 +1,107 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+
+@model EventLogFilterDto
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        <p class="fw-semibold fs-18 mb-0">مدیریت نرم افزار</p>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item pointer">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">کارتابل</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page"> فیلتر رویداد ها ممیزی </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<input type="hidden" id="messages" value='@(Model.message != null ? Json.Serialize(Model.message) : "[]")' />
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    مدیریت فیلتر رویداد های ممیزی
+                    @if (!Model.IsValid)
+                    {
+                        <small class="text-danger"> ( داده های غیرمجاز ) </small>
+                    }
+                </div>
+            </div>
+            <div class="card-body d-flex align-items-start">
+
+                <form asp-area="Setting" asp-controller="EventLogFilter" asp-action="Update" method="post" class="w-100">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Identity" />
+
+                    <div class="row mt-2">
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <label class="form-label" asp-for="LogBarayeHarGooneTalasheEhrazeHoviateChandGaneyeKarbar">(*) الزام ثبت رویدادهای احراز هویت پایه ویا چندگانه</label>
+                                <input class="form-check-input pointer EventLogFilterReadOnly" type="checkbox" id="LogBarayeHarGooneTalasheEhrazeHoviateChandGaneyeKarbar" name="LogBarayeHarGooneTalasheEhrazeHoviateChandGaneyeKarbar" checked="@(Model.LogBarayeHarGooneTalasheEhrazeHoviateChandGaneyeKarbar ? true : false)" value="true" />
+                            </div>
+                        </div>
+
+
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <label class="form-label" asp-for="MustLoginBeLogged">الزام ثبت رویدادهای ورود/خروج کاربران</label>
+                                <input class="form-check-input pointer EventLogFilterReadOnly" type="checkbox" id="MustLoginBeLogged" name="MustLoginBeLogged" checked="@(Model.MustLoginBeLogged ? true : false)" value="true" />
+                            </div>
+                        </div>
+
+
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <label class="form-label" asp-for="LogBarayeRaddeRamzeObour">(*) الزام ثبت رویدادهای رد رمزعبور</label>
+                                <input class="form-check-input pointer EventLogFilterReadOnly" type="checkbox" id="LogBarayeRaddeRamzeObour" name="LogBarayeRaddeRamzeObour" checked="@(Model.LogBarayeRaddeRamzeObour ? true : false)" value="true" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <label class="form-label" asp-for="LogBarayeGozarAzHaddeAstaneyeHoshdareMomayezi">(*) الزام ثبت رویدادهای حد آستانه هشدار ممیزی</label>
+                                <input class="form-check-input pointer EventLogFilterReadOnly" type="checkbox" id="LogBarayeGozarAzHaddeAstaneyeHoshdareMomayezi" name="LogBarayeGozarAzHaddeAstaneyeHoshdareMomayezi" checked="@(Model.LogBarayeGozarAzHaddeAstaneyeHoshdareMomayezi ? true : false)" value="true" />
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-check form-switch">
+                                <label class="form-label" asp-for="LogBarayeGozarAzHaddeAstaneyeBohraneMomayezi">(*) الزام ثبت رویدادهای حد بحران ممیزی</label>
+                                <input class="form-check-input pointer EventLogFilterReadOnly" type="checkbox" id="LogBarayeGozarAzHaddeAstaneyeBohraneMomayezi" name="LogBarayeGozarAzHaddeAstaneyeBohraneMomayezi" checked="@(Model.LogBarayeGozarAzHaddeAstaneyeBohraneMomayezi ? true : false)" value="true" />
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="d-flex align-items-center justify-content-center mt-3 col-12">
+                        @{
+                            var EditSms = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "EventLogFilter_Edit");
+                            if (EditSms)
+                            {
+                                <a class="btn btn-sm btn-warning mx-1" id="Edit">ویرایش اطلاعات</a>
+                                <a class="btn btn-sm btn-danger mx-1" id="Cancel">انصراف</a>
+                                <button type="submit" class="btn btn-sm btn-success mx-1" id="Submit">ذخیره اطلاعات</button>
+                            }
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/Setting/EventLogFilter.js"></script>
+}

@@ -1,0 +1,256 @@
+﻿@using System.Security.Claims
+@inject IPermissionService PermissionService
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@model ApartmanDto
+@{
+    Layout = "_Layout";
+}
+
+<div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+    <div>
+        @if (Model.shod > 0)
+        {
+            <p class="fw-semibold fs-18 mb-0">اطلاعات بازدید آپارتمان</p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item pointer">
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark">کارتابل</a>
+                    </li>
+                    <li class="breadcrumb-item pointer">
+                        <form method="post" asp-area="Marahel" asp-controller="Visit" asp-action="Index" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="shop" value="@Model.shop" />
+                            <input type="hidden" name="shod" value="@Model.shod" />
+                            <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-decoration-none text-primary">
+                                مرحله بازدید
+                            </button>
+                        </form>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">اطلاعات بازدید آپارتمان</li>
+                </ol>
+            </nav>
+        }
+        else
+        {
+            <p class="fw-semibold fs-18 mb-0">اطلاعات آپارتمان</p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item pointer">
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark">کارتابل</a>
+                    </li>
+                    <li class="breadcrumb-item pointer">
+                        <form method="post" asp-controller="ParvandehInfo" asp-action="Index" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="shop" value="@Model.shop" />
+                            <button type="submit" class="btn btn-link p-0 m-0 align-baseline text-decoration-none text-primary">
+                                اطلاعات پرونده
+                            </button>
+                        </form>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">اطلاعات آپارتمان</li>
+                </ol>
+            </nav>
+        }
+       
+    </div>
+    <div class="btn-list mt-md-0 mt-2">
+        @{
+            var Savabegh = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_Savabegh");
+            var Karbari = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_Karbari");
+            var Malekin = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Parvandeh_Malekin");
+
+            if (Savabegh)
+            {
+                <form method="post" asp-controller="Savabegh" asp-action="Index" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="shop" value="@Model.shop" />
+                    <input type="hidden" name="shod" value="@Model.shod" />
+                    <input type="hidden" name="dShop" value="@Model.dShop" />
+                    <input type="hidden" name="NoeParvandeh" value="aparteman" />
+                    <button type="submit" class="btn btn-sm btn-primary btn-wave waves-effect waves-light">
+                        سوابق آپارتمان
+                    </button>
+                </form>
+            }
+            if (Karbari)
+            {
+                <form method="post" asp-controller="Dv_karbari" asp-action="Index" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="shop" value="@Model.shop" />
+                    <input type="hidden" name="shod" value="@Model.shod" />
+                    <input type="hidden" name="dShop" value="@Model.dShop" />
+                    <input type="hidden" name="NoeParvandeh" value="aparteman" />
+                    <button type="submit" class="btn btn-sm btn-primary btn-wave waves-effect waves-light">
+                        کاربری آپارتمان
+                    </button>
+                </form>
+            }
+            if (Malekin)
+            {
+                <form method="post" asp-controller="Malekin" asp-action="Index" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="shop" value="@Model.shop" />
+                    <input type="hidden" name="shod" value="@Model.shod" />
+                    <input type="hidden" name="dShop" value="@Model.dShop" />
+                    <input type="hidden" name="NoeParvandeh" value="aparteman" />
+                    <button type="submit" class="btn btn-sm btn-primary btn-wave waves-effect waves-light">
+                        مالکین آپارتمان
+                    </button>
+                </form>
+            }
+
+        }
+    </div>
+</div>
+
+<input type="hidden" value="@Model.shop" id="ApartemanInfoShop" />
+<input type="hidden" id="ApartemanErrorMessages" value='@(Model.message != null ? Json.Serialize(Model.message) : "[]")' />
+<input type="hidden" id="RequestVerificationToken" value="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
+
+<div class="row">
+    <div class="col-xl-12">
+
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    اطلاعات آپارتمان
+                    @if (!Model.IsValid)
+                    {
+                        <small class="text-danger"> ( داده های غیرمجاز ) </small>
+                    }
+                </div>
+            </div>
+            <div class="card-body d-flex align-items-start">
+                <form asp-controller="Apartman" asp-action="UpdateApartman" method="post" id="ApartemanInfoForm" autocomplete="off" class="w-100">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Identity" />
+                    <input type="hidden" asp-for="shop" />
+                    <input type="hidden" asp-for="radif" />
+                    <input type="hidden" asp-for="sh_Darkhast" />
+                    <input type="hidden" asp-for="Active" />
+                    <input type="hidden" id="shod" name="shod" value="@Model.shod" />
+                    <input type="hidden" id="dShop" name="dShop" value="@Model.dShop" />
+                    <div class="row">
+                        <div class="col-3">
+                            <label for="" class="form-label">نوع سند</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_noesanad" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="noesanad" readonly="readonly">
+                                <button type="button" class="input-group-text ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="ApartemanInfoNoesanadBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">وضع سند</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_vazsanad" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="vazsanad" readonly="readonly">
+                                <button type="button" class="input-group-text ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="ApartemanInfoVazsanadBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">نوع مالکیت</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_noemalekiyat" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="noemalekiyat" readonly="readonly">
+                                <button type="button" class="input-group-text ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="ApartemanInfoNoemalekiyatBtn">...</button>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <label for="" class="form-label">نوع سازه</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="c_NoeSaze" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="NoeSaze" readonly="readonly">
+                                <button type="button" class="input-group-text ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="ApartemanInfoNoeSazeBtn">...</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label for="" class="form-label">جهت</label>
+                            <div class="input-group">
+                                <input type="hidden" asp-for="C_Jahat" />
+                                <input type="text" class="form-control form-control-sm @(Model.IsValid ? "valid" : "not_valid")" asp-for="jahat" readonly="readonly">
+                                <button type="button" class="input-group-text ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" id="ApartemanInfoJahatBtn">...</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="pelakabi">پلاک آبی</label>
+                            <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="pelakabi" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="tel">تلفن</label>
+                            <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tel" />
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label" asp-for="codeposti">کد پستی</label>
+                            <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="codeposti" />
+                        </div>
+
+                        <div class="col-3">
+                            <label class="form-label" asp-for="MasahatKol">مساحت کل</label>
+                            <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="MasahatKol" />
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-3">
+                            <label class="form-label" asp-for="MasahatArse">مساحت عرصه</label>
+                            <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="MasahatArse" />
+                        </div>
+                        <div class="col-9 d-flex align-items-center justify-content-between">
+                            <label class="form-label mt-4">پلاک ثبتی</label>
+                            <div class="col-2">
+                                <label class="form-label" asp-for="tafkiki">تفکیکی</label>
+                                <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="tafkiki" />
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label" asp-for="fari">فرعی</label>
+                                <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="fari" />
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label" asp-for="azFari">از فرعی</label>
+                                <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="azFari" />
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label" asp-for="asli">اصلی</label>
+                                <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="asli" />
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label" asp-for="bakhsh">بخش</label>
+                                <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="bakhsh" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <label class="form-label" asp-for="address">آدرس</label>
+                            <input class="form-control form-control-sm ApartemanInfoReadOnly @(Model.IsValid ? "valid" : "not_valid")" asp-for="address" />
+                        </div>
+                    </div>
+                    @{
+                        var EditAparteman = await PermissionService.HasPermissionAsync(User.FindFirstValue(ClaimTypes.NameIdentifier), "Aparteman_Edit");
+
+                        if (EditAparteman)
+                        {
+                            <div class="d-flex align-items-center justify-content-center mt-3 col-12">
+                                <a class="btn btn-sm btn-warning mx-1" id="ApartemanInfoEdit">ویرایش اطلاعات</a>
+                                <a class="btn btn-sm btn-danger mx-1" id="ApartemanInfoCancel">انصراف</a>
+                                <button type="submit" class="btn btn-sm btn-success mx-1" id="ApartemanInfoSubmit">ذخیره اطلاعات</button>
+                            </div>
+                        }
+                    }
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/tools/parametric.js"></script>
+    <script src="~/js/areas/parvandeh/aparteman/aparteman.js"></script>
+}

@@ -1,0 +1,52 @@
+﻿button[disabled],
+input[readonly],
+textarea[readonly] {
+    background-color: rgb(243, 246, 248);
+    border: 1px solid #ced4da;
+    color: #333335;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.h-300 {
+    max-height: 300px !important;
+}
+
+.custom-progress {
+    height: 20px !important;
+    border-radius: 3px !important;
+}
+
+.selected th {
+    background-color: #dddddd !important;
+    color: #000 !important;
+}
+
+.no-spinner {
+    -moz-appearance: textfield; /* برای فایرفاکس */
+}
+
+    .no-spinner::-webkit-inner-spin-button,
+    .no-spinner::-webkit-outer-spin-button {
+        -webkit-appearance: none; /* برای کروم و سافاری */
+        margin: 0; /* حذف فاصله */
+    }
+
+
+.valid {
+    /*background-color: #6dff222b !important;*/
+}
+
+.not_valid {
+    /*background-color: #ff223754 !important;*/
+    background: rgb(230,83,60,0.3) !important;
+}
+
+    .not_valid:hover,
+    .not_valid:focus {
+        background: rgba(230, 83, 60, 0.6) !important;
+    }
